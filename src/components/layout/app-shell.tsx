@@ -9,12 +9,13 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { UserProfileMenu } from "@/components/layout/user-profile-menu";
 import { CustomSandboxModal } from "@/components/interactive/custom-sandbox-modal";
+import { CurrencyToggle } from "@/components/ui/currency-toggle";
 import { Menu, X, AlertCircle } from "lucide-react";
 
 function ShellInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isSandboxOpen, setIsSandboxOpen, currency } = useSymbion();
+  const { isSandboxOpen, setIsSandboxOpen, currency, setCurrency } = useSymbion();
   const { isLoggedOut, login } = useUserSession();
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
@@ -40,12 +41,24 @@ function ShellInner({ children }: { children: React.ReactNode }) {
       </a>
 
       {/* Mobile Top Bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 shadow-xs lg:hidden">
-        <div>
-          <div className="text-[14px] font-bold text-slate-900">Symbion v2.0</div>
-          <div className="text-[10px] font-semibold text-slate-500">Industrial decision engine</div>
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-3 sm:px-4 shadow-xs lg:hidden">
+        <div className="flex items-center gap-2 min-w-0">
+          <div>
+            <div className="text-[13.5px] font-bold text-slate-900 leading-none">
+              Symbion <span className="text-[#2c7a4b] text-[10px] font-mono font-bold">v2.0</span>
+            </div>
+            <div className="text-[9.5px] font-semibold text-slate-500 mt-0.5 truncate">
+              Industrial decision engine
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          {/* Mobile Currency Switcher */}
+          <CurrencyToggle
+            currentCurrency={currency}
+            onCurrencyChange={setCurrency}
+          />
+
           {/* Mobile Profile Menu */}
           <UserProfileMenu compact />
 
@@ -97,14 +110,14 @@ function ShellInner({ children }: { children: React.ReactNode }) {
                 href="/login"
                 className="px-3 py-1.5 rounded-lg bg-[#2c7a4b] hover:bg-[#23613c] text-white font-bold text-[11.5px] transition-colors shadow-xs flex items-center gap-1.5"
               >
-                <span>Halaman Masuk (Login) →</span>
+                <span>Sign In (Login) →</span>
               </Link>
               <button
                 type="button"
                 onClick={() => login("regional_partner")}
                 className="px-2.5 py-1 rounded-lg bg-white border border-amber-300 hover:bg-amber-100/60 text-amber-900 font-semibold text-[11.5px] transition-colors shadow-xs"
               >
-                Mitra
+                Partner
               </button>
               <button
                 type="button"
@@ -118,7 +131,7 @@ function ShellInner({ children }: { children: React.ReactNode }) {
         )}
 
         {/* Dynamic Page Content */}
-        <main id="main-content" className="w-full min-w-0 max-w-[1550px] mx-auto p-4 sm:p-6 md:p-8">
+        <main id="main-content" className="w-full min-w-0 max-w-[1550px] mx-auto p-3 sm:p-6 md:p-8">
           {children}
         </main>
       </div>

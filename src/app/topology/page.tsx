@@ -22,31 +22,31 @@ export default function TopologyPage() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center border border-sky-200">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center border border-sky-200 shrink-0">
             <Activity className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-[18px] font-bold text-slate-900 tracking-tight leading-none">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight leading-snug">
                 Material Flow Topology Workspace
               </h1>
               <StatusBadge type={isJhiri ? "INPUT_DEFICIT" : "OUTPUT_SURPLUS"} />
             </div>
-            <p className="text-[12.5px] text-slate-500 mt-1.5">
+            <p className="text-[11.5px] sm:text-[12.5px] text-slate-500 mt-1 leading-snug">
               Interactive bipartite network mapping feedstock sources, core digestion hub, and secondary byproduct sinks.
             </p>
           </div>
         </div>
 
         {/* Live Canvas Tooltip & Stats */}
-        <div className="flex items-center gap-2 font-mono text-[11px]">
-          <span className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200">
+        <div className="flex flex-wrap items-center gap-2 font-mono text-[10.5px] sm:text-[11px] w-full sm:w-auto">
+          <span className="flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200">
             <Move className="w-3.5 h-3.5 text-primary" />
             <span>DRAGGABLE NODES</span>
           </span>
-          <span className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">
+          <span className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">
             MASS BALANCE: 100% BALANCED
           </span>
         </div>
@@ -54,44 +54,44 @@ export default function TopologyPage() {
 
       {/* Role-Differentiated Topology Status Banner */}
       {isPartner && (
-        <div className="p-3.5 rounded-xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 flex flex-wrap items-center justify-between gap-3 text-[12px] shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
+        <div className="p-3 sm:p-3.5 rounded-xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 flex flex-wrap items-center justify-between gap-2.5 text-[11.5px] sm:text-[12px] shadow-xs">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-600 animate-pulse mt-1 sm:mt-0 shrink-0" />
             <span>
               <strong>Regional Partner Inflow Active:</strong> PT Sawit Subang node is currently routing 5,000 m³/mo POME & 800 t/mo EFB to the Central Digester Hub. Mass balance equilibrium is sustained at 100%.
             </span>
           </div>
-          <span className="font-mono font-bold text-emerald-800 text-[11px] px-2.5 py-0.5 rounded bg-white border border-emerald-300">
+          <span className="font-mono font-bold text-emerald-800 text-[10.5px] sm:text-[11px] px-2.5 py-0.5 rounded bg-white border border-emerald-300 self-end sm:self-auto">
             Node Status: Active & Contracted
           </span>
         </div>
       )}
 
       {isAdmin && (
-        <div className="p-3.5 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-[12px] shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="p-3 sm:p-3.5 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-wrap items-center justify-between gap-2.5 text-[11.5px] sm:text-[12px] shadow-xs">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse mt-1 sm:mt-0 shrink-0" />
             <span>
               <strong>Estate Administrator Master Graph:</strong> Full bipartite flow routing enabled across upstream generators, anaerobic digesters, and industrial off-take sinks.
             </span>
           </div>
-          <span className="font-mono font-bold text-emerald-300 text-[11px] px-2.5 py-0.5 rounded bg-slate-800 border border-slate-700">
+          <span className="font-mono font-bold text-emerald-300 text-[10.5px] sm:text-[11px] px-2.5 py-0.5 rounded bg-slate-800 border border-slate-700 self-end sm:self-auto">
             Authority: Root Flow Routing
           </span>
         </div>
       )}
 
       {/* Stream Filter Toggle Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold uppercase text-slate-400 px-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-white border border-slate-200 shadow-xs">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase text-slate-400 px-1 sm:px-2">
             STREAM FILTER:
           </span>
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-[11.5px] font-medium">
+          <div className="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-[10.5px] sm:text-[11.5px] font-medium">
             <button
               type="button"
               onClick={() => setSelectedFilter("all")}
-              className={`px-3 py-1 rounded-md transition-all ${
+              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
                 selectedFilter === "all"
                   ? "bg-white text-slate-900 font-bold shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -102,7 +102,7 @@ export default function TopologyPage() {
             <button
               type="button"
               onClick={() => setSelectedFilter("inflow")}
-              className={`px-3 py-1 rounded-md transition-all ${
+              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
                 selectedFilter === "inflow"
                   ? "bg-white text-slate-900 font-bold shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -113,7 +113,7 @@ export default function TopologyPage() {
             <button
               type="button"
               onClick={() => setSelectedFilter("outflow")}
-              className={`px-3 py-1 rounded-md transition-all ${
+              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
                 selectedFilter === "outflow"
                   ? "bg-white text-slate-900 font-bold shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -124,9 +124,9 @@ export default function TopologyPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
-          <Info className="w-3.5 h-3.5 text-slate-400" />
-          <span>Click & drag any node to explore spatial layout & link anchors</span>
+        <div className="flex items-center gap-1.5 text-[10.5px] sm:text-[11px] font-mono text-slate-500">
+          <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <span>Click & drag any node to explore spatial layout</span>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export default function TopologyPage() {
       </div>
 
       {/* Network Nodes & Streams Inventory Table */}
-      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+      <div className="p-4 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
             <Layers className="w-5 h-5 text-primary" />

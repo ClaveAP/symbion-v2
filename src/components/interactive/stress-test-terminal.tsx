@@ -85,14 +85,14 @@ export function StressTestTerminal() {
       </div>
 
       {/* Preset Shock Switcher Strip */}
-      <div className="p-4 bg-slate-100/60 border-b border-slate-200 flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-mono uppercase font-bold text-slate-500 mr-1">
+      <div className="p-3 sm:p-4 bg-slate-100/60 border-b border-slate-200 flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <span className="text-[10px] sm:text-[11px] font-mono uppercase font-bold text-slate-500 mr-1 w-full sm:w-auto">
           Select Shock Event:
         </span>
         <button
           type="button"
           onClick={() => setActiveShockId("nominal")}
-          className={`px-3 py-1.5 rounded-lg text-[11.5px] font-mono font-semibold transition-all ${
+          className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[10.5px] sm:text-[11.5px] font-mono font-semibold transition-all cursor-pointer ${
             activeShockId === "nominal"
               ? "bg-primary text-white shadow-xs"
               : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
@@ -103,7 +103,7 @@ export function StressTestTerminal() {
         <button
           type="button"
           onClick={() => setActiveShockId("feedstock")}
-          className={`px-3 py-1.5 rounded-lg text-[11.5px] font-mono font-semibold transition-all ${
+          className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[10.5px] sm:text-[11.5px] font-mono font-semibold transition-all cursor-pointer ${
             activeShockId === "feedstock"
               ? "bg-amber-600 text-white shadow-xs"
               : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
@@ -114,7 +114,7 @@ export function StressTestTerminal() {
         <button
           type="button"
           onClick={() => setActiveShockId("operating_days")}
-          className={`px-3 py-1.5 rounded-lg text-[11.5px] font-mono font-semibold transition-all ${
+          className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[10.5px] sm:text-[11.5px] font-mono font-semibold transition-all cursor-pointer ${
             activeShockId === "operating_days"
               ? "bg-amber-600 text-white shadow-xs"
               : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
@@ -125,7 +125,7 @@ export function StressTestTerminal() {
         <button
           type="button"
           onClick={() => setActiveShockId("offtake")}
-          className={`px-3 py-1.5 rounded-lg text-[11.5px] font-mono font-semibold transition-all ${
+          className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[10.5px] sm:text-[11.5px] font-mono font-semibold transition-all cursor-pointer ${
             activeShockId === "offtake"
               ? "bg-rose-600 text-white shadow-xs"
               : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
@@ -136,7 +136,7 @@ export function StressTestTerminal() {
         <button
           type="button"
           onClick={() => setActiveShockId("custom")}
-          className={`px-3 py-1.5 rounded-lg text-[11.5px] font-mono font-semibold transition-all ${
+          className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-[10.5px] sm:text-[11.5px] font-mono font-semibold transition-all cursor-pointer ${
             activeShockId === "custom"
               ? "bg-slate-800 text-white shadow-xs"
               : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
@@ -147,15 +147,15 @@ export function StressTestTerminal() {
       </div>
 
       {/* Dynamic Results Grid */}
-      <div className="p-5 space-y-4">
+      <div className="p-4 sm:p-5 space-y-4">
         {/* Custom Slider Bar if active */}
         {activeShockId === "custom" && (
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between text-[12px] font-mono">
+          <div className="p-3 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div className="flex flex-wrap items-center justify-between text-[11px] sm:text-[12px] font-mono gap-1">
               <span className="font-semibold text-slate-700">
                 Adjust Custom Disruption Magnitude:
               </span>
-              <span className="font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+              <span className="font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[10.5px] sm:text-[11px]">
                 -{customShockPct}% Shock
               </span>
             </div>
@@ -168,7 +168,7 @@ export function StressTestTerminal() {
               onChange={(e) => setCustomShockPct(Number(e.target.value))}
               className="w-full accent-primary h-2 bg-slate-200 rounded-lg cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] font-mono text-slate-400">
+            <div className="flex justify-between text-[8.5px] sm:text-[10px] font-mono text-slate-400 gap-1">
               <span>Minor (-5%)</span>
               <span>Standard (-20%)</span>
               <span>Severe (-40%)</span>

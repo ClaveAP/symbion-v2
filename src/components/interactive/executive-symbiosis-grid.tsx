@@ -26,10 +26,12 @@ interface NodePosition {
 }
 
 const calculateDefaultNodes = (width: number): Record<string, NodePosition> => {
-  const isCompact = width < 480;
-  const cardW = isCompact ? Math.max(135, Math.floor((width - 36) / 2)) : 175;
+  // Ensure we compute based on at least 500px so cards and flow badges have adequate spacing
+  const effectiveW = Math.max(width, 500);
+  const isCompact = effectiveW < 560;
+  const cardW = isCompact ? 155 : 175;
   const leftX = 14;
-  const rightX = Math.max(leftX + cardW + 30, width - cardW - 14);
+  const rightX = effectiveW - cardW - 14;
 
   return {
     municipal: { id: "municipal", x: leftX, y: 16, w: cardW, h: 78 },
@@ -53,7 +55,7 @@ export function ExecutiveSymbiosisGrid() {
   useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
-        const w = containerRef.current.clientWidth;
+        const w = Math.max(containerRef.current.clientWidth, 500);
         setNodes(calculateDefaultNodes(w));
       }
     };
@@ -63,7 +65,7 @@ export function ExecutiveSymbiosisGrid() {
   }, []);
 
   const resetPositions = () => {
-    const w = containerRef.current?.clientWidth || 520;
+    const w = Math.max(containerRef.current?.clientWidth || 520, 500);
     setNodes(calculateDefaultNodes(w));
     showToast("Network topology reset to balanced alignment.");
   };
@@ -103,7 +105,7 @@ export function ExecutiveSymbiosisGrid() {
         if (!node) return prev;
 
         const container = containerRef.current;
-        const containerW = container ? container.clientWidth : 520;
+        const containerW = container ? Math.max(container.clientWidth, 500) : 520;
         const containerH = container ? container.clientHeight : 370;
 
         const maxX = Math.max(10, containerW - node.w - 10);
@@ -202,30 +204,35 @@ export function ExecutiveSymbiosisGrid() {
       {/* LEFT COLUMN (6 COLS): MATERIAL FLOW & SYMBIOSIS TOPOLOGY PREVIEW */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between overflow-hidden">
         {/* Toolbar Header */}
-        <div className="flex flex-wrap items-center justify-between px-5 py-3 bg-slate-50/80 border-b border-slate-200 gap-2">
-          <div className="flex items-center gap-2">
-            <Network className="w-4 h-4 text-[#2c7a4b]" />
-            <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">
+        <div className="flex flex-wrap items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3 bg-slate-50/80 border-b border-slate-200 gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <Network className="w-4 h-4 text-[#2c7a4b] shrink-0" />
+            <h3 className="text-[13px] sm:text-[14px] font-bold text-slate-900 tracking-tight truncate">
               Material Flow & Distribution Network
             </h3>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">
+            <span className="text-[10px] font-mono px-1.5 sm:px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold shrink-0">
               {currentCase.location.split(",")[0]}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Draggable Hint */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
+            {/* Mobile swipe hint */}
+            <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1 sm:hidden">
+              <Move className="w-3 h-3" />
+              Swipe ↔
+            </span>
+            {/* Desktop Draggable Hint */}
             <span className="text-[10.5px] text-slate-400 font-mono hidden xl:flex items-center gap-1">
               <Move className="w-3 h-3" />
               Drag nodes
             </span>
 
             {/* Filter Tabs */}
-            <div className="flex items-center gap-1 bg-slate-200/80 p-0.5 rounded-lg text-[10.5px] font-semibold">
+            <div className="flex items-center gap-0.5 sm:gap-1 bg-slate-200/80 p-0.5 rounded-lg text-[10px] sm:text-[10.5px] font-semibold">
               <button
                 type="button"
                 onClick={() => setActiveStreamTab("all")}
-                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   activeStreamTab === "all"
                     ? "bg-white text-slate-900 font-bold shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -236,7 +243,7 @@ export function ExecutiveSymbiosisGrid() {
               <button
                 type="button"
                 onClick={() => setActiveStreamTab("material")}
-                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   activeStreamTab === "material"
                     ? "bg-white text-slate-900 font-bold shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -247,7 +254,7 @@ export function ExecutiveSymbiosisGrid() {
               <button
                 type="button"
                 onClick={() => setActiveStreamTab("energy")}
-                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   activeStreamTab === "energy"
                     ? "bg-white text-slate-900 font-bold shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -262,32 +269,33 @@ export function ExecutiveSymbiosisGrid() {
               type="button"
               onClick={resetPositions}
               title="Reset node positions to default layout"
-              className="flex items-center gap-1 px-2 py-1 rounded-md border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-[10.5px] font-mono font-semibold transition-colors cursor-pointer"
+              className="flex items-center gap-1 px-2 py-1 rounded-md border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-[10px] sm:text-[10.5px] font-mono font-semibold transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3 h-3 text-slate-500" />
-              <span>Reset</span>
+              <span className="hidden sm:inline">Reset</span>
             </button>
           </div>
         </div>
 
         {/* Clean Docked Opportunity Alert Banner */}
-        <div className="mx-4 mt-3 p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 flex items-center justify-between text-[11.5px] gap-2">
-          <div className="flex items-center gap-2 text-amber-800">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+        <div className="mx-3 sm:mx-4 mt-2.5 sm:mt-3 p-2 sm:p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] sm:text-[11.5px] gap-1.5 sm:gap-2">
+          <div className="flex items-start sm:items-center gap-2 text-amber-800">
+            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
             <span>
               <strong>70.0 t/d Wet Waste Deficit</strong> (53.33% utilization) → Solution: <strong>Mandi Organic Waste Integration</strong>
             </span>
           </div>
-          <span className="px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] font-mono font-bold shrink-0">
+          <span className="px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[9.5px] sm:text-[10px] font-mono font-bold shrink-0 self-end sm:self-auto">
             GAP CLOSURE
           </span>
         </div>
 
-        {/* Interactive Draggable SVG & HTML Topology Canvas */}
-        <div
-          ref={containerRef}
-          className="relative w-full h-[370px] bg-[#f8fafc] overflow-hidden select-none touch-none"
-        >
+        {/* Responsive Canvas Viewport with Horizontal Touch Panning */}
+        <div className="relative w-full overflow-x-auto overflow-y-hidden touch-pan-x">
+          <div
+            ref={containerRef}
+            className="relative min-w-[500px] sm:min-w-0 w-full h-[370px] bg-[#f8fafc] overflow-hidden select-none touch-none"
+          >
           {/* Engineering Dot Grid Background */}
           <svg className="absolute inset-0 w-full h-full opacity-35 pointer-events-none">
             <defs>
@@ -697,10 +705,11 @@ export function ExecutiveSymbiosisGrid() {
             </div>
           </div>
         </div>
+        </div>
 
         {/* Stream Legend & Link Bar */}
-        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] font-mono">
-          <div className="flex items-center gap-3">
+        <div className="px-3.5 sm:px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-[10.5px] sm:text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#2c7a4b]" />
               <span className="text-slate-600">Organic Waste (132.5 t/d)</span>
@@ -717,7 +726,7 @@ export function ExecutiveSymbiosisGrid() {
 
           <Link
             href="/topology"
-            className="flex items-center gap-1 text-[#2c7a4b] hover:text-[#1e5835] font-bold font-sans transition-colors group"
+            className="flex items-center gap-1 text-[#2c7a4b] hover:text-[#1e5835] font-bold font-sans transition-colors group self-end sm:self-auto shrink-0"
           >
             <span>Open Studio</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -726,40 +735,40 @@ export function ExecutiveSymbiosisGrid() {
       </div>
 
       {/* RIGHT COLUMN (6 COLS): CANDIDATE FACILITY BLUEPRINT */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 flex flex-col justify-between space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-4">
         <div>
           {/* Header */}
           <div className="pb-2.5 border-b border-slate-100">
-            <div className="flex items-center justify-between mb-1">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#2c7a4b] text-white text-[10px] font-bold font-mono tracking-wide uppercase">
+            <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+              <span className="px-2 sm:px-2.5 py-0.5 rounded-full bg-[#2c7a4b] text-white text-[9.5px] sm:text-[10px] font-bold font-mono tracking-wide uppercase">
                 ECOSYSTEM INTERVENTION BLUEPRINT
               </span>
-              <span className="text-[11px] text-[#2c7a4b] font-bold">
+              <span className="text-[10.5px] sm:text-[11px] text-[#2c7a4b] font-bold">
                 Capacity Gap Closure
               </span>
             </div>
-            <h3 className="text-[16px] text-slate-900 font-bold mt-1 leading-snug">
+            <h3 className="text-[15px] sm:text-[16px] text-slate-900 font-bold mt-1 leading-snug">
               Facility Plan: GAIL Jhiri Continuous Biogas CSTR Digester
             </h3>
-            <p className="text-[11.5px] text-slate-500 mt-0.5 leading-snug">
+            <p className="text-[11px] sm:text-[11.5px] text-slate-500 mt-0.5 leading-snug">
               Ex-ante optimization to bridge the 70.0 t/d input gap, lifting plant utilization from 53.33% to 88.33%.
             </p>
           </div>
 
           {/* Feedstock Safety Buffer Meter */}
           <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 mt-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[11.5px] font-bold text-slate-800">
+            <div className="flex flex-wrap items-center justify-between gap-1">
+              <span className="text-[11px] sm:text-[11.5px] font-bold text-slate-800">
                 Design Capacity Utilization
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-[#2c7a4b] text-[10.5px] font-bold font-mono">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-[#2c7a4b] text-[10px] sm:text-[10.5px] font-bold font-mono">
                 88.33% Restored (+65.6% Gain)
               </span>
             </div>
 
-            <div className="flex justify-between text-[10.5px] text-slate-600">
-              <span>Baseline: <strong className="text-slate-900">80.0 t/day (53.33%)</strong></span>
-              <span>With Mandi Waste: <strong className="text-[#2c7a4b] font-bold">132.5 t/day (88.33%)</strong></span>
+            <div className="flex flex-wrap justify-between text-[10px] sm:text-[10.5px] text-slate-600 gap-1">
+              <span>Baseline: <strong className="text-slate-900">80.0 t/d (53.33%)</strong></span>
+              <span>With Mandi Waste: <strong className="text-[#2c7a4b] font-bold">132.5 t/d (88.33%)</strong></span>
             </div>
 
             <div className="w-full h-2.5 bg-slate-200 rounded-full relative overflow-hidden flex items-center">
@@ -767,7 +776,7 @@ export function ExecutiveSymbiosisGrid() {
               <div className="absolute left-[53.33%] top-0 bottom-0 w-0.5 bg-amber-500 z-10" />
             </div>
 
-            <div className="flex justify-between text-[9.5px] font-mono text-slate-400">
+            <div className="flex justify-between text-[8.5px] sm:text-[9.5px] font-mono text-slate-400 gap-1">
               <span>0 t/d</span>
               <span className="text-amber-600 font-bold">↑ Baseline 80 t/d</span>
               <span className="text-[#2c7a4b] font-bold">132.5 t/d (α = 75%)</span>
@@ -782,21 +791,21 @@ export function ExecutiveSymbiosisGrid() {
             </span>
 
             {/* Step 1 */}
-            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11.5px]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold">
+            <div className="p-2 sm:p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px] sm:text-[11.5px] gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                   1
                 </div>
-                <div>
-                  <div className="font-bold text-slate-900 leading-tight">
+                <div className="min-w-0">
+                  <div className="font-bold text-slate-900 leading-tight truncate">
                     Segregated Wet Feedstock Intake
                   </div>
-                  <div className="text-[10px] text-slate-500">
+                  <div className="text-[9.5px] sm:text-[10px] text-slate-500 truncate">
                     Ranchi Municipal wet waste + Pandra wholesale mandi
                   </div>
                 </div>
               </div>
-              <div className="text-right font-mono">
+              <div className="text-right font-mono shrink-0">
                 <span className="font-bold text-slate-900 block">132.5</span>
                 <span className="text-[9px] text-slate-400">t / day</span>
               </div>
@@ -807,23 +816,23 @@ export function ExecutiveSymbiosisGrid() {
             </div>
 
             {/* Step 2 */}
-            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11.5px]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold">
+            <div className="p-2 sm:p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px] sm:text-[11.5px] gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                   2
                 </div>
-                <div>
-                  <div className="font-bold text-slate-900 leading-tight">
+                <div className="min-w-0">
+                  <div className="font-bold text-slate-900 leading-tight truncate">
                     High-Rate Anaerobic CSTR Digestion
                   </div>
-                  <div className="text-[10px] text-slate-500">
+                  <div className="text-[9.5px] sm:text-[10px] text-slate-500 truncate">
                     Sealed thermophilic biomethane generation
                   </div>
                 </div>
               </div>
-              <div className="text-right font-mono">
+              <div className="text-right font-mono shrink-0">
                 <span className="font-bold text-[#2c7a4b] block">43,725</span>
-                <span className="text-[9px] text-slate-400">t / year processed</span>
+                <span className="text-[9px] text-slate-400">t / yr processed</span>
               </div>
             </div>
 
@@ -832,21 +841,21 @@ export function ExecutiveSymbiosisGrid() {
             </div>
 
             {/* Step 3 */}
-            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11.5px]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold">
+            <div className="p-2 sm:p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px] sm:text-[11.5px] gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                   3
                 </div>
-                <div>
-                  <div className="font-bold text-slate-900 leading-tight">
+                <div className="min-w-0">
+                  <div className="font-bold text-slate-900 leading-tight truncate">
                     Clean Energy Yield (CBG)
                   </div>
-                  <div className="text-[10px] text-slate-500">
+                  <div className="text-[9.5px] sm:text-[10px] text-slate-500 truncate">
                     Upgraded biomethane vehicle fuel & grid injection
                   </div>
                 </div>
               </div>
-              <div className="text-right font-mono">
+              <div className="text-right font-mono shrink-0">
                 <span className="font-bold text-slate-900 block">1,650</span>
                 <span className="text-[9px] text-slate-400">tons CBG / yr</span>
               </div>
@@ -857,21 +866,21 @@ export function ExecutiveSymbiosisGrid() {
             </div>
 
             {/* Step 4 */}
-            <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between text-[11.5px]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold">
+            <div className="p-2 sm:p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between text-[11px] sm:text-[11.5px] gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-full bg-[#2c7a4b] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                   4
                 </div>
-                <div>
-                  <div className="font-bold text-emerald-950 leading-tight">
+                <div className="min-w-0">
+                  <div className="font-bold text-emerald-950 leading-tight truncate">
                     Gross Annual Economic Dividends
                   </div>
-                  <div className="text-[10px] text-emerald-700">
+                  <div className="text-[9.5px] sm:text-[10px] text-emerald-700 truncate">
                     Commercial off-take under SATAT framework & FOM fertilizer
                   </div>
                 </div>
               </div>
-              <div className="text-right font-mono">
+              <div className="text-right font-mono shrink-0">
                 <span className="font-bold text-[#2c7a4b] block">{formattedGrossValue}</span>
                 <span className="text-[9px] text-slate-400">/ year</span>
               </div>
@@ -880,11 +889,11 @@ export function ExecutiveSymbiosisGrid() {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 pt-2">
           <button
             type="button"
             onClick={() => showToast("Recalculating thermodynamic mass balance for Jhiri...")}
-            className="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11.5px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer"
+            className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11.5px] font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
             <span>Recalculate Yield</span>
@@ -893,7 +902,7 @@ export function ExecutiveSymbiosisGrid() {
           <button
             type="button"
             onClick={handleApplyCooperation}
-            className="py-2 px-3 rounded-xl bg-[#2c7a4b] hover:bg-[#23613c] text-white text-[11.5px] font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+            className="py-2.5 px-3 rounded-xl bg-[#2c7a4b] hover:bg-[#23613c] text-white text-[11.5px] font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
           >
             <Rocket className="w-3.5 h-3.5 text-white" />
             <span>Apply Partnership</span>

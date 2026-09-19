@@ -25,7 +25,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { login } = useUserSession();
 
-  // Active Role Tab (Mitra Kawasan vs Admin Pengelola)
+  // Active Role Tab (Regional Partner vs Estate Administrator)
   const [selectedRole, setSelectedRole] = useState<UserRole>("regional_partner");
   const [username, setUsername] = useState("operator.subang@symbion.id");
   const [password, setPassword] = useState("IndustrialSymbiosis2026!");
@@ -95,7 +95,7 @@ export default function LoginPage() {
       {/* ================================================================= */}
       {/* Full-Bleed Top Header Bar (Edge-to-Edge with Status & Support)    */}
       {/* ================================================================= */}
-      <header className="relative z-10 w-full px-6 sm:px-10 lg:px-12 py-5 sm:py-6 flex items-center justify-between border-b border-slate-200/50 bg-white/40 backdrop-blur-xs">
+      <header className="relative z-10 w-full px-4 sm:px-10 lg:px-12 py-4 sm:py-6 flex items-center justify-between border-b border-slate-200/50 bg-white/40 backdrop-blur-xs">
         {/* Official Brand Logo & Title */}
         <div className="flex items-center gap-3">
           <div className="relative w-9 h-9 flex items-center justify-center shrink-0">
@@ -109,20 +109,20 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-[20px] text-slate-900 tracking-tight leading-none">
+            <span className="font-extrabold text-[18px] sm:text-[20px] text-slate-900 tracking-tight leading-none">
               Symbion
             </span>
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#2c7a4b] border border-emerald-200 uppercase tracking-wider">
-              PLATFORM
+              v2.0 PLATFORM
             </span>
           </div>
         </div>
 
         {/* Right Status & Support Links */}
-        <div className="flex items-center gap-3 sm:gap-5 text-xs font-medium">
+        <div className="flex items-center gap-2.5 sm:gap-5 text-xs font-medium">
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-xs border border-slate-200 text-slate-700 shadow-2xs font-mono text-[11px]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Sistem Berjalan Normal (v2.4)</span>
+            <span>System Operational (v2.0)</span>
           </div>
 
           <button
@@ -131,7 +131,7 @@ export default function LoginPage() {
             className="hover:text-[#2c7a4b] text-slate-600 transition-colors font-semibold flex items-center gap-1.5 cursor-pointer text-xs"
           >
             <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-            <span>Bantuan &amp; Kontak</span>
+            <span>Help &amp; Support</span>
           </button>
         </div>
       </header>
@@ -139,20 +139,20 @@ export default function LoginPage() {
       {/* ================================================================= */}
       {/* Main Login Card Section (Harmonized Width & Proportional Layout)  */}
       {/* ================================================================= */}
-      <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 py-4 sm:py-8">
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 py-6 sm:py-10">
         <div className="w-full max-w-[1040px] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_60px_-15px_rgba(8,97,53,0.12),0_2px_8px_rgba(0,0,0,0.04)] border border-slate-200/90 overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
           {/* ------------------------------------------------------------- */}
           {/* Left Column: Form & Full-Width Role Switcher                  */}
           {/* ------------------------------------------------------------- */}
-          <div className="md:col-span-7 p-7 sm:p-10 lg:p-12 flex flex-col justify-between">
+          <div className="md:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
             <div>
               {/* Title & Brief Greeting */}
               <div className="mb-5">
-                <h1 className="text-[26px] sm:text-[28px] font-extrabold text-slate-900 tracking-tight leading-tight">
-                  Selamat Datang
+                <h1 className="text-[24px] sm:text-[28px] font-extrabold text-slate-900 tracking-tight leading-tight">
+                  Welcome Back
                 </h1>
-                <p className="text-[13px] text-slate-500 mt-1.5 leading-relaxed max-w-[46ch]">
-                  Masuk ke akun Anda untuk memantau sirkularitas kawasan dan mengelola data limbah industri.
+                <p className="text-[12.5px] sm:text-[13px] text-slate-500 mt-1.5 leading-relaxed max-w-[48ch]">
+                  Sign in to monitor industrial circularity, optimize material flows, and evaluate decarbonization yields.
                 </p>
               </div>
 
@@ -162,25 +162,25 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => handleRoleChange("regional_partner")}
                   className={cn(
-                    "py-2 px-3 rounded-lg font-bold transition-all text-center cursor-pointer text-[12px]",
+                    "py-2 px-2.5 sm:px-3 rounded-lg font-bold transition-all text-center cursor-pointer text-[11.5px] sm:text-[12px]",
                     selectedRole === "regional_partner"
                       ? "bg-white text-[#2c7a4b] shadow-xs"
                       : "text-slate-500 hover:text-slate-800"
                   )}
                 >
-                  Mitra Kawasan &amp; User
+                  Regional Partner
                 </button>
                 <button
                   type="button"
                   onClick={() => handleRoleChange("estate_administrator")}
                   className={cn(
-                    "py-2 px-3 rounded-lg font-bold transition-all text-center cursor-pointer text-[12px]",
+                    "py-2 px-2.5 sm:px-3 rounded-lg font-bold transition-all text-center cursor-pointer text-[11.5px] sm:text-[12px]",
                     selectedRole === "estate_administrator"
                       ? "bg-white text-[#2c7a4b] shadow-xs"
                       : "text-slate-500 hover:text-slate-800"
                   )}
                 >
-                  Admin Pengelola
+                  Estate Administrator
                 </button>
               </div>
 
@@ -190,9 +190,9 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="username_id"
-                    className="block text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+                    className="block text-[10.5px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider mb-1.5"
                   >
-                    ID PENGGUNA ATAU EMAIL <span className="text-emerald-600">*</span>
+                    USER ID OR EMAIL <span className="text-emerald-600">*</span>
                   </label>
                   <div className="relative flex items-center">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -216,16 +216,16 @@ export default function LoginPage() {
                   <div className="flex items-center justify-between mb-1.5">
                     <label
                       htmlFor="password"
-                      className="block text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider"
+                      className="block text-[10.5px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider"
                     >
-                      KATA SANDI <span className="text-emerald-600">*</span>
+                      PASSWORD <span className="text-emerald-600">*</span>
                     </label>
                     <button
                       type="button"
                       onClick={() => setModalType("forgot")}
                       className="text-xs text-[#2c7a4b] hover:text-[#23613c] hover:underline font-semibold cursor-pointer"
                     >
-                      Lupa kata sandi?
+                      Forgot password?
                     </button>
                   </div>
                   <div className="relative flex items-center">
@@ -264,7 +264,7 @@ export default function LoginPage() {
                       className="w-4 h-4 text-[#2c7a4b] border-slate-300 rounded focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer accent-[#2c7a4b]"
                     />
                     <span className="text-xs text-slate-600 font-medium">
-                      Ingat akun ini di perangkat ini
+                      Remember this session on this device
                     </span>
                   </label>
                 </div>
@@ -278,11 +278,11 @@ export default function LoginPage() {
                   {isLoading ? (
                     <span className="inline-flex items-center gap-2">
                       <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                      <span>Memverifikasi Akses...</span>
+                      <span>Verifying Access...</span>
                     </span>
                   ) : (
                     <>
-                      <span>Masuk ke Dashboard</span>
+                      <span>Sign In to Dashboard</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
@@ -292,21 +292,21 @@ export default function LoginPage() {
 
             {/* Registration Help Footer */}
             <div className="mt-8 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-              <span>Pabrik belum terdaftar di kawasan?</span>
+              <span>Facility not yet registered in cluster?</span>
               <button
                 type="button"
                 onClick={() => setModalType("register")}
                 className="font-bold text-[#2c7a4b] hover:text-[#23613c] hover:underline cursor-pointer"
               >
-                Ajukan Akses Mitra Baru
+                Request New Partner Access
               </button>
             </div>
           </div>
 
           {/* ------------------------------------------------------------- */}
-          {/* Right Column: Brand Showcase with New Official Logo           */}
+          {/* Right Column: Brand Showcase with Official Logo & Impact      */}
           {/* ------------------------------------------------------------- */}
-          <div className="md:col-span-5 bg-gradient-to-br from-[#072416] via-[#0e3b25] to-[#092215] p-7 sm:p-9 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
+          <div className="md:col-span-5 bg-gradient-to-br from-[#072416] via-[#0e3b25] to-[#092215] p-6 sm:p-9 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
             {/* Ambient background glows */}
             <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-emerald-400/15 blur-3xl pointer-events-none" />
             <div className="absolute -left-12 -bottom-12 w-52 h-52 rounded-full bg-teal-400/15 blur-3xl pointer-events-none" />
@@ -329,18 +329,18 @@ export default function LoginPage() {
                     Symbion Platform
                   </p>
                   <p className="text-[11.5px] text-emerald-300/80 mt-0.5 font-medium">
-                    Kawasan Industri Ramah Lingkungan
+                    Industrial Symbiosis Ecosystem
                   </p>
                 </div>
               </div>
 
               {/* Pitch & Value Props */}
               <div className="space-y-3.5">
-                <h2 className="text-[19px] sm:text-[21px] font-bold leading-snug text-white">
-                  Pusat Kolaborasi Energi Bersih &amp; Ekonomi Sirkular
+                <h2 className="text-[18px] sm:text-[21px] font-bold leading-snug text-white">
+                  Clean Energy &amp; Circular Economy Decision Engine
                 </h2>
-                <p className="text-[12.5px] text-emerald-100/80 leading-relaxed font-sans mt-2.5">
-                  Platform terpadu untuk menghubungkan produsen limbah organik industri dengan fasilitas energi terbarukan, menciptakan nilai tambah nyata dan penurunan emisi karbon.
+                <p className="text-[12px] sm:text-[12.5px] text-emerald-100/80 leading-relaxed font-sans mt-2.5">
+                  Integrated platform connecting industrial waste and byproduct generators with bio-refining hubs and commercial off-takers to eliminate resource deficits and maximize decarbonization.
                 </p>
 
                 {/* 3 Key Value Checkpoints */}
@@ -351,10 +351,10 @@ export default function LoginPage() {
                     </div>
                     <div className="text-xs">
                       <p className="font-bold text-white leading-tight text-[13px]">
-                        Dua Tampilan Sesuai Kebutuhan
+                        Dual Role-Based Workspaces
                       </p>
                       <p className="text-[11.5px] text-emerald-100/75 leading-relaxed mt-0.5">
-                        Ringkasan Eksekutif ramah awam untuk manajemen, dan Portal Kelola Data untuk operator pabrik.
+                        Executive Synthesis tailored for senior leadership, and Data Integration Hub for plant operations.
                       </p>
                     </div>
                   </div>
@@ -365,10 +365,10 @@ export default function LoginPage() {
                     </div>
                     <div className="text-xs">
                       <p className="font-bold text-white leading-tight text-[13px]">
-                        Perhitungan Otomatis Potensi Profit
+                        Automated Techno-Economic Valuation
                       </p>
                       <p className="text-[11.5px] text-emerald-100/75 leading-relaxed mt-0.5">
-                        Estimasi langsung pendapatan listrik PLN dan pengurangan CO₂ dari data limbah yang dimasukkan.
+                        Live multi-currency financial models (MYR, IDR, USD) and ISO 14064 verified carbon abatement accounting.
                       </p>
                     </div>
                   </div>
@@ -379,10 +379,10 @@ export default function LoginPage() {
                     </div>
                     <div className="text-xs">
                       <p className="font-bold text-white leading-tight text-[13px]">
-                        Data Aman &amp; Terverifikasi
+                        Enterprise Security &amp; Data Integrity
                       </p>
                       <p className="text-[11.5px] text-emerald-100/75 leading-relaxed mt-0.5">
-                        Kerahasiaan formula produksi dan kuantitas limbah terenkripsi sesuai standar kawasan industri.
+                        Confidential feedstock stoichiometry and proprietary throughput records encrypted to international standards.
                       </p>
                     </div>
                   </div>
@@ -394,10 +394,10 @@ export default function LoginPage() {
             <div className="relative z-10 pt-5 mt-6 border-t border-white/10 flex items-center justify-between text-[11px] text-emerald-200/80 font-mono">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="font-medium">Enkripsi 256-bit SSL</span>
+                <span className="font-medium">256-bit SSL Encryption</span>
               </div>
               <span className="text-emerald-300/70 text-[10.5px]">
-                Subang - Cirebon Cluster
+                I-SINERGIE 2026
               </span>
             </div>
           </div>
@@ -408,34 +408,34 @@ export default function LoginPage() {
       {/* Full-Bleed Minimal Footer (Edge-to-Edge Container)                */}
       {/* ================================================================= */}
       <footer className="relative z-10 w-full px-6 sm:px-10 lg:px-12 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 border-t border-slate-200/60 bg-white/40 backdrop-blur-xs mt-auto">
-        <p>© 2025 Symbion Industrial Ecology Platform. Hak Cipta Dilindungi.</p>
+        <p>© 2026 Symbion Industrial Symbiosis Decision Platform. All rights reserved.</p>
         <div className="flex items-center gap-5 mt-2 sm:mt-0 font-medium">
           <button
             type="button"
             onClick={() => setModalType("support")}
             className="hover:text-slate-600 transition-colors cursor-pointer"
           >
-            Kebijakan Privasi
+            Privacy Policy
           </button>
           <button
             type="button"
             onClick={() => setModalType("support")}
             className="hover:text-slate-600 transition-colors cursor-pointer"
           >
-            Syarat Layanan
+            Terms of Service
           </button>
           <button
             type="button"
             onClick={() => setModalType("support")}
             className="hover:text-slate-600 transition-colors cursor-pointer"
           >
-            Pusat Bantuan
+            Help Center
           </button>
         </div>
       </footer>
 
       {/* ================================================================= */}
-      {/* Interactive Support Modal ("Bantuan & Kontak")                     */}
+      {/* Interactive Support Modal ("Help & Support")                      */}
       {/* ================================================================= */}
       {modalType === "support" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
@@ -446,14 +446,14 @@ export default function LoginPage() {
                   <HelpCircle className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">Bantuan &amp; Kontak</h3>
-                  <p className="text-[11px] text-slate-500">Departemen Teknik Industri, IPB University</p>
+                  <h3 className="text-[15px] font-bold text-slate-900">Help &amp; Support</h3>
+                  <p className="text-[11px] text-slate-500">Department of Agroindustrial Technology, IPB University</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setModalType("none")}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -463,10 +463,10 @@ export default function LoginPage() {
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5">
                   <Building2 className="w-3.5 h-3.5 text-[#2c7a4b]" />
-                  <span>Tim Peneliti Symbion v2.0</span>
+                  <span>Symbion v2.0 Research Team</span>
                 </div>
                 <p className="text-[11.5px] text-slate-500">
-                  Didukung oleh Department of Industrial Systems Engineering, IPB University untuk kompetisi I-SINERGIE Malaysia 2026.
+                  Developed by the Department of Agroindustrial Technology, IPB University for the I-SINERGIE Malaysia 2026 International Competition.
                 </p>
               </div>
 
@@ -477,7 +477,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex items-center gap-2 text-slate-700">
                   <Phone className="w-4 h-4 text-[#2c7a4b]" />
-                  <span>Hotline Kawasan: <strong className="font-mono text-slate-900">+62 251 8622-642</strong></span>
+                  <span>Cluster Hotline: <strong className="font-mono text-slate-900">+62 251 8622-642</strong></span>
                 </div>
               </div>
             </div>
@@ -485,9 +485,9 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setModalType("none")}
-              className="w-full py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors"
+              className="w-full py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
             >
-              Tutup
+              Close
             </button>
           </div>
         </div>
@@ -500,28 +500,28 @@ export default function LoginPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-[15px] font-bold text-slate-900">Pemulihan Kata Sandi</h3>
+              <h3 className="text-[15px] font-bold text-slate-900">Account Recovery &amp; Demo Access</h3>
               <button
                 type="button"
                 onClick={() => setModalType("none")}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <p className="text-[12.5px] text-slate-600 leading-relaxed">
-              Dalam mode demonstrasi kompetisi, Anda dapat langsung menggunakan kredensial default untuk mengakses sistem:
+              In this international competition demonstration session, you can authenticate immediately using pre-configured verified credentials:
             </p>
 
             <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-[12px] space-y-2 text-emerald-950 font-mono">
               <div>
-                <span className="text-emerald-700 font-bold block">1. Mitra Kawasan:</span>
+                <span className="text-emerald-700 font-bold block">1. Regional Partner:</span>
                 <span>User: operator.subang@symbion.id</span><br />
                 <span>Pass: IndustrialSymbiosis2026!</span>
               </div>
               <div className="pt-1.5 border-t border-emerald-200/60">
-                <span className="text-emerald-700 font-bold block">2. Admin Pengelola:</span>
+                <span className="text-emerald-700 font-bold block">2. Estate Administrator:</span>
                 <span>User: admin.estate@symbion.id</span><br />
                 <span>Pass: MasterCluster2026!</span>
               </div>
@@ -533,29 +533,29 @@ export default function LoginPage() {
                 setModalType("none");
                 handleRoleChange(selectedRole);
               }}
-              className="w-full py-2.5 rounded-xl bg-[#2c7a4b] text-white text-xs font-bold hover:bg-[#23613c] transition-colors"
+              className="w-full py-2.5 rounded-xl bg-[#2c7a4b] text-white text-xs font-bold hover:bg-[#23613c] transition-colors cursor-pointer"
             >
-              Terapkan Kredensial Otomatis
+              Apply Demo Credentials
             </button>
           </div>
         </div>
       )}
 
       {/* ================================================================= */}
-      {/* Interactive Registration Modal ("Ajukan Akses Mitra Baru")         */}
+      {/* Interactive Registration Modal ("Request New Partner Access")     */}
       {/* ================================================================= */}
       {modalType === "register" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <h3 className="text-[15px] font-bold text-slate-900">Pengajuan Akses Mitra Baru</h3>
-                <p className="text-[11.5px] text-slate-500">Integrasi pabrik baru ke kawasan industri ramah lingkungan</p>
+                <h3 className="text-[15px] font-bold text-slate-900">New Partner Access Application</h3>
+                <p className="text-[11.5px] text-slate-500">Integrate a new facility into the circular symbiosis network</p>
               </div>
               <button
                 type="button"
                 onClick={() => setModalType("none")}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -566,40 +566,40 @@ export default function LoginPage() {
                 <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-xs">
                   <Check className="w-5 h-5 stroke-[2.5]" />
                 </div>
-                <div className="font-bold text-emerald-950 text-[13.5px]">Pengajuan Berhasil Dikirim!</div>
+                <div className="font-bold text-emerald-950 text-[13.5px]">Application Submitted Successfully!</div>
                 <p className="text-[12px] text-emerald-800">
-                  Tim Estate Administrator akan memverifikasi profil industri dan aliran limbah Anda.
+                  The Estate Administrator team will audit your industrial profile and byproduct stream compatibility.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-3 text-[12px]">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Nama Perusahaan / Pabrik *</label>
+                  <label className="block font-bold text-slate-700 mb-1">Company / Facility Name *</label>
                   <input
                     type="text"
                     required
                     value={regCompany}
                     onChange={(e) => setRegCompany(e.target.value)}
-                    placeholder="Contoh: PT Sawit Subang Makmur"
+                    placeholder="e.g. PT Sawit Subang Makmur"
                     className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-[#2c7a4b] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Email Koordinator *</label>
+                  <label className="block font-bold text-slate-700 mb-1">Coordinator Email *</label>
                   <input
                     type="email"
                     required
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    placeholder="nama@perusahaan.co.id"
+                    placeholder="contact@facility.com"
                     className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-[#2c7a4b] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Jenis Limbah Utama</label>
+                  <label className="block font-bold text-slate-700 mb-1">Primary Byproduct Stream</label>
                   <input
                     type="text"
-                    placeholder="Contoh: POME, EFB, Bagasse, Fly Ash"
+                    placeholder="e.g. POME, EFB, Mandi Organic Waste, Fly Ash"
                     className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-[#2c7a4b] focus:outline-none"
                   />
                 </div>
@@ -607,9 +607,9 @@ export default function LoginPage() {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-2.5 rounded-xl bg-[#2c7a4b] hover:bg-[#23613c] text-white text-xs font-bold transition-colors shadow-xs"
+                    className="w-full py-2.5 rounded-xl bg-[#2c7a4b] hover:bg-[#23613c] text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
                   >
-                    Kirim Permohonan Akses
+                    Submit Access Request
                   </button>
                 </div>
               </form>
