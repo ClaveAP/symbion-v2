@@ -6,22 +6,34 @@ import { useUserSession } from "@/context/user-session-context";
 import { MethodologyCard } from "@/components/interactive/methodology-card";
 import {
   Binary,
-  Download,
   Award,
   GitBranch,
   Scale,
   FileText,
   Building2,
   ShieldCheck,
+  Lock,
+  Mail,
+  Copy,
+  Check,
+  X,
+  ExternalLink,
 } from "lucide-react";
 
 export default function MethodologyPage() {
   const { isPartner, isAdmin } = useUserSession();
   const [activeTab, setActiveTab] = useState<"flowchart" | "cases" | "equations" | "references">("flowchart");
+  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [copiedCitation, setCopiedCitation] = useState(false);
 
-  const handlePrintDossier = () => {
-    if (typeof window !== "undefined") {
-      window.print();
+  const paperCitation =
+    "Nurcahyo, Z., Faiza, K. R., Anggoro, D. S., Prasetia, T. A., & Hidayat, A. P. (2026). Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis. Department of Industrial Systems Engineering, IPB University. Prepared for I-SINERGIE Malaysia 2026.";
+
+  const handleCopyCitation = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(paperCitation);
+      setCopiedCitation(true);
+      setTimeout(() => setCopiedCitation(false), 2500);
     }
   };
 
@@ -119,14 +131,20 @@ export default function MethodologyPage() {
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={handlePrintDossier}
-            className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[12px] font-semibold border border-white/20 transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Print Academic Dossier</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-400/10 text-amber-300 border border-amber-400/20">
+              <Lock className="w-3 h-3 text-amber-400" />
+              <span>Private Manuscript • Embargoed</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowAccessModal(true)}
+              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[12px] font-semibold border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Mail className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Request Paper Access</span>
+            </button>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -571,6 +589,135 @@ export default function MethodologyPage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* ACCESS REQUEST & CONFIDENTIALITY MODAL */}
+      {showAccessModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setShowAccessModal(false)}
+        >
+          <div
+            className="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden space-y-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-6 bg-gradient-to-r from-slate-900 via-slate-800 to-[#14503f] text-white flex items-start justify-between gap-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <Lock className="w-3 h-3 text-amber-400" />
+                    CONFIDENTIAL PREPRINT • UNDER PEER REVIEW
+                  </span>
+                </div>
+                <h3 className="text-[17px] font-bold text-white tracking-tight leading-snug">
+                  Symbion Research Paper & Modeling Dossier
+                </h3>
+                <p className="text-[12px] text-emerald-300">
+                  I-SINERGIE Malaysia 2026 Official Entry • IPB University
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAccessModal(false)}
+                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[12px] text-slate-700 leading-relaxed space-y-2">
+                <p>
+                  <strong>Notice of Confidentiality:</strong> The complete academic manuscript containing proprietary thermodynamic equations, evolutionary algorithm derivations, and empirical industrial datasets (GAIL Jhiri & NTPC Gadarwara) is protected under institutional competition embargo and journal review.
+                </p>
+                <p className="text-slate-600 text-[11.5px]">
+                  Competition jurors, academic reviewers, and industrial park evaluators can request full-text access directly from the lead researchers.
+                </p>
+              </div>
+
+              {/* Principal Investigator Contact Info */}
+              <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-800">
+                    Corresponding Author / PI
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-emerald-800 border border-emerald-300 font-semibold">
+                    Lead Investigator
+                  </span>
+                </div>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h4 className="text-[14px] font-bold text-slate-900">
+                      Zamzam Nurcahyo
+                    </h4>
+                    <p className="text-[11.5px] text-slate-600">
+                      Department of Industrial Systems Engineering, IPB University
+                    </p>
+                    <p className="text-[11px] font-mono text-emerald-700 mt-0.5">
+                      nczamzam@apps.ipb.ac.id
+                    </p>
+                  </div>
+                  <a
+                    href="mailto:nczamzam@apps.ipb.ac.id?subject=%5BSymbion%20v2.0%5D%20Academic%20Paper%20Access%20Request%20(I-SINERGIE%20Malaysia)&body=Dear%20Zamzam%20Nurcahyo%20and%20Symbion%20Research%20Team,%0A%0AI%20am%20reviewing%20the%20Symbion%20v2.0%20decision%20engine%20for%20I-SINERGIE%20Malaysia%202026%20and%20would%20like%20to%20request%20access%20to%20the%20full%20academic%20manuscript%20and%20methodology%20appendix.%0A%0AOrganization%20/%20Role:%20%0APurpose%20of%20Request:%20%0A%0ABest%20regards,"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2c7a4b] hover:bg-[#23613c] text-white text-[12px] font-semibold transition-colors shadow-xs shrink-0"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Request via Email</span>
+                    <ExternalLink className="w-3 h-3 text-emerald-200" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Citation Box */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
+                    Suggested Academic Citation (APA)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleCopyCitation}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2c7a4b] hover:text-[#23613c] transition-colors cursor-pointer"
+                  >
+                    {copiedCitation ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-700 font-bold">Copied to Clipboard!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy Citation</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-[11px] font-serif text-slate-800 leading-relaxed select-all">
+                  {paperCitation}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
+              <span className="text-[10.5px] font-mono text-slate-500">
+                Proprietary Academic Intellectual Property • Symbion v2.0
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowAccessModal(false)}
+                className="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-[12px] font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -23,9 +23,7 @@ export function Header() {
 
   // Export action only relevant on pages where report printing makes sense
   const exportLabel =
-    pathname === "/methodology"
-      ? "Print Academic Paper"
-      : pathname === "/impact"
+    pathname === "/impact"
       ? "Export Impact Dossier"
       : pathname === "/stress-test"
       ? "Export Stress Report"
