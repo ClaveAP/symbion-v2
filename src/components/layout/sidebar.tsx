@@ -57,7 +57,7 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
                   Symbion
                 </span>
                 <span className="text-[10px] font-mono text-[#2c7a4b] font-bold">
-                  v1.0
+                  v2.0
                 </span>
               </div>
               <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-semibold mt-0.5">

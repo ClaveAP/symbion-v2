@@ -45,7 +45,7 @@ function ShellInner({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-2 min-w-0">
           <div>
             <div className="text-[13.5px] font-bold text-slate-900 leading-none">
-              Symbion <span className="text-[#2c7a4b] text-[10px] font-mono font-bold">v1.0</span>
+              Symbion <span className="text-[#2c7a4b] text-[10px] font-mono font-bold">v2.0</span>
             </div>
             <div className="text-[9.5px] font-semibold text-slate-500 mt-0.5 truncate">
               Industrial decision engine

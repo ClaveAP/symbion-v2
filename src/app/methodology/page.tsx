@@ -791,7 +791,7 @@ export default function MethodologyPage() {
                     </p>
                   </div>
                   <a
-                    href="mailto:nczamzam@apps.ipb.ac.id?subject=%5BSymbion%20v1.0%5D%20Academic%20Paper%20Access%20Request%20(I-SINERGIE%20Malaysia)&body=Dear%20Zamzam%20Nurcahyo%20and%20Symbion%20Research%20Team,%0A%0AI%20am%20reviewing%20the%20Symbion%20v1.0%20decision%20engine%20for%20I-SINERGIE%20Malaysia%202026%20and%20would%20like%20to%20request%20access%20to%20the%20full%20academic%20manuscript%20and%20methodology%20appendix.%0A%0AOrganization%20/%20Role:%20%0APurpose%20of%20Request:%20%0A%0ABest%20regards,"
+                    href="mailto:nczamzam@apps.ipb.ac.id?subject=%5BSymbion%20v2.0%5D%20Academic%20Paper%20Access%20Request%20(I-SINERGIE%20Malaysia)&body=Dear%20Zamzam%20Nurcahyo%20and%20Symbion%20Research%20Team,%0A%0AI%20am%20reviewing%20the%20Symbion%20v2.0%20decision%20engine%20for%20I-SINERGIE%20Malaysia%202026%20and%20would%20like%20to%20request%20access%20to%20the%20full%20academic%20manuscript%20and%20methodology%20appendix.%0A%0AOrganization%20/%20Role:%20%0APurpose%20of%20Request:%20%0A%0ABest%20regards,"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2c7a4b] hover:bg-[#23613c] text-white text-[12px] font-semibold transition-colors shadow-xs shrink-0"
                   >
                     <Mail className="w-3.5 h-3.5" />
@@ -834,7 +834,7 @@ export default function MethodologyPage() {
             {/* Modal Footer */}
             <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
               <span className="text-[10.5px] font-mono text-slate-500">
-                Proprietary Academic Intellectual Property • Symbion v1.0
+                Proprietary Academic Intellectual Property • Symbion v2.0
               </span>
               <button
                 type="button"
