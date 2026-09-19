@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   PlusCircle,
   ShieldAlert,
+  Sliders,
 } from "lucide-react";
 
 export interface AppNavigationItem {
@@ -38,6 +39,13 @@ export const APP_NAVIGATION: AppNavigationSection[] = [
         shortLabel: "Topology",
         description: "Interactive facility nodes, material streams, and balance verification.",
         icon: Activity,
+      },
+      {
+        href: "/scenarios",
+        label: "Gap Analysis Matrix",
+        shortLabel: "Scenarios",
+        description: "Ex-ante comparison across 50%, 75%, and 100% gap fulfillment.",
+        icon: Sliders,
       },
       {
         href: "/impact",

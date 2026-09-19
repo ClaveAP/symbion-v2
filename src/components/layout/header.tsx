@@ -15,7 +15,7 @@ export function Header() {
   const { isPartner, isAdmin, currentUser } = useUserSession();
 
   // Pages with monetary figures that require currency conversion
-  const pagesWithCurrency = ["/", "/impact", "/stress-test"];
+  const pagesWithCurrency = ["/", "/impact", "/stress-test", "/scenarios"];
   const hasCurrency = pagesWithCurrency.includes(pathname);
 
   // Quick submit feedstock shortcut only needed on dashboard
