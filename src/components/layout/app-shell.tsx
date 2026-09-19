@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SymbionProvider, useSymbion } from "@/context/symbion-context";
 import { UserSessionProvider, useUserSession } from "@/context/user-session-context";
 import { Sidebar } from "@/components/layout/sidebar";
@@ -13,9 +13,17 @@ import { Menu, X, AlertCircle } from "lucide-react";
 
 function ShellInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { isSandboxOpen, setIsSandboxOpen, currency } = useSymbion();
   const { isLoggedOut, login } = useUserSession();
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+
+  // Client-side authentication guard: redirect to /login if logged out
+  useEffect(() => {
+    if (isLoggedOut && pathname !== "/login") {
+      router.replace("/login");
+    }
+  }, [isLoggedOut, pathname, router]);
 
   // When on the standalone login page, bypass analytical sidebar & header
   if (pathname === "/login") {

@@ -191,23 +191,31 @@ const UserSessionContext = createContext<UserSessionContextType | undefined>(und
 export function UserSessionProvider({ children }: { children: React.ReactNode }) {
   const [activeRole, setActiveRole] = useState<UserRole>("regional_partner");
   const [customProfile, setCustomProfile] = useState<UserProfile | null>(null);
-  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false);
+  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(true);
 
-  // Restore saved session from localStorage on client mount
+  // Restore saved session from localStorage and cookie on client mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
+        const hasAuthCookie = document.cookie
+          .split(";")
+          .some((c) => c.trim().startsWith("symbion_auth=true"));
         const saved = localStorage.getItem("symbion_user_session");
-        if (saved) {
+
+        if (hasAuthCookie && saved) {
           const parsed = JSON.parse(saved);
           if (parsed && parsed.role) {
             setCustomProfile(parsed);
             setActiveRole(parsed.role);
             setIsLoggedOut(false);
+            return;
           }
         }
+        // If no auth cookie or invalid session, enforce logged out state
+        setIsLoggedOut(true);
       } catch (err) {
         console.error("Failed to restore user session", err);
+        setIsLoggedOut(true);
       }
     }
   }, []);
@@ -230,6 +238,11 @@ export function UserSessionProvider({ children }: { children: React.ReactNode })
     setActiveRole(role);
     setCustomProfile(demoProfile);
     setIsLoggedOut(false);
+
+    if (typeof document !== "undefined") {
+      document.cookie = "symbion_auth=true; path=/; max-age=2592000; SameSite=Lax";
+    }
+
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("symbion_user_session", JSON.stringify(demoProfile));
@@ -242,6 +255,11 @@ export function UserSessionProvider({ children }: { children: React.ReactNode })
   const logout = useCallback(() => {
     setIsLoggedOut(true);
     setCustomProfile(null);
+
+    if (typeof document !== "undefined") {
+      document.cookie = "symbion_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+    }
+
     if (typeof window !== "undefined") {
       try {
         localStorage.removeItem("symbion_user_session");
@@ -265,6 +283,10 @@ export function UserSessionProvider({ children }: { children: React.ReactNode })
       setActiveRole(targetRole);
       setCustomProfile(profileToSet);
       setIsLoggedOut(false);
+
+      if (typeof document !== "undefined") {
+        document.cookie = "symbion_auth=true; path=/; max-age=2592000; SameSite=Lax";
+      }
 
       if (typeof window !== "undefined") {
         try {
