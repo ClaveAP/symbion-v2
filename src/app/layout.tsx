@@ -10,7 +10,7 @@ const geistSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Symbion v1.0 - Industrial Symbiosis Decision Support System",
+  title: "Symbion v2.0 - Industrial Symbiosis Decision Support System",
   description:
     "Ex-ante decision evaluation engine for industrial symbiosis, circular resource matching, and industrial ecology networks. Prepared for I-SINERGIE Malaysia 2026.",
 };

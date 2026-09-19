@@ -18,13 +18,109 @@ import {
   Check,
   X,
   ExternalLink,
+  Sparkles,
 } from "lucide-react";
 
 export default function MethodologyPage() {
   const { isPartner, isAdmin } = useUserSession();
   const [activeTab, setActiveTab] = useState<"flowchart" | "cases" | "equations" | "references">("flowchart");
+  const [frameworkView, setFrameworkView] = useState<"all" | "ai">("all");
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [copiedCitation, setCopiedCitation] = useState(false);
+
+  const frameworkSteps = [
+    {
+      stepNumber: 1,
+      badge: "STEP 1 • FOUNDATIONAL DATA",
+      category: "DATA INTEGRATION",
+      code: "DATA",
+      title: "Data Collection & Multi-Tier Integration",
+      indoBox: "Pengumpulan dan Integrasi Data",
+      isAiPillar: false,
+      codeBadge: "bg-amber-100 text-amber-800 border-amber-300",
+      badgeClass: "bg-amber-50 text-amber-800 border-amber-200",
+      description:
+        "Ingests industrial profiles, material and energy flows, thermodynamic grades, spatial coordinates, logistic tariffs, and regulatory baselines. Real-world plant inputs are cross-verified and augmented by benchmark proxy databases.",
+    },
+    {
+      stepNumber: 2,
+      badge: "STEP 2 • AI PILLAR 1",
+      category: "KNOWLEDGE GRAPH",
+      code: "KG",
+      title: "Knowledge Graph (KG) Ecosystem Modeling",
+      indoBox: "Pemodelan Ekosistem Industri — KG",
+      isAiPillar: true,
+      codeBadge: "bg-sky-100 text-sky-800 border-sky-300",
+      badgeClass: "bg-sky-50 text-sky-800 border-sky-200",
+      description:
+        "Represents industrial actors, material and energy streams, thermodynamic grades, and transport infrastructure as a dynamic multi-relational graph. Aggregates data through park operators to safeguard proprietary commercial secrets.",
+    },
+    {
+      stepNumber: 3,
+      badge: "STEP 3 • GAP ANALYSIS",
+      category: "DIAGNOSTIC ENGINE",
+      code: "GAP",
+      title: "Supply-Demand & Compatibility Gap Analysis",
+      indoBox: "Analisis Supply-Demand dan Kompatibilitas",
+      isAiPillar: false,
+      codeBadge: "bg-purple-100 text-purple-800 border-purple-300",
+      badgeClass: "bg-purple-50 text-purple-800 border-purple-200",
+      description:
+        "Identifies volumetric raw material deficits, unutilized slurry/effluent surpluses, stoichiometric requirements, and thermodynamic/chemical compatibility thresholds to determine whether secondary suppliers or off-takers are required.",
+    },
+    {
+      stepNumber: 4,
+      badge: "STEP 4 • AI PILLAR 2",
+      category: "GRAPH NEURAL NET",
+      code: "GNN",
+      title: "Missing Industry Identification (GNN)",
+      indoBox: "Alternatif Missing Industry — GNN & Kebutuhan Pengguna",
+      isAiPillar: true,
+      codeBadge: "bg-indigo-100 text-indigo-800 border-indigo-300",
+      badgeClass: "bg-indigo-50 text-indigo-800 border-indigo-200",
+      description:
+        "Uses Graph Neural Networks to recommend complementary facility types (e.g. CSTR Anaerobic Digesters, Fly Ash Brick Plants, Biomass Pelletizers) that will absorb unutilized by-products and close open material loops.",
+    },
+    {
+      stepNumber: 5,
+      badge: "STEP 5 • AI PILLAR 3",
+      category: "GENETIC ALGORITHM",
+      code: "GA",
+      title: "Configuration Optimization (Genetic Algorithm)",
+      indoBox: "Optimasi Konfigurasi — GA",
+      isAiPillar: true,
+      codeBadge: "bg-emerald-100 text-emerald-800 border-emerald-300",
+      badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200",
+      description:
+        "Solves multi-objective Pareto optimization across resource utilization, gross economic revenue, transport distances, and avoided emissions subject to capacity and thermodynamic mass-balance constraints.",
+    },
+    {
+      stepNumber: 6,
+      badge: "STEP 6 • AI PILLAR 4",
+      category: "AGENT-BASED MODEL",
+      code: "ABM",
+      title: "Dynamic Resilience Stress Testing (ABM)",
+      indoBox: "Simulasi dan Uji Ketahanan — ABM",
+      isAiPillar: true,
+      codeBadge: "bg-rose-100 text-rose-800 border-rose-300",
+      badgeClass: "bg-rose-50 text-rose-800 border-rose-200",
+      description:
+        "Deploys Agent-Based Modeling to simulate behavior under upstream supply disruption (-20% to -80%), facility operating-time downtime, and downstream off-take cancellations, confirming 70%–80% nominal performance retention.",
+    },
+    {
+      stepNumber: 7,
+      badge: "STEP 7 • DECISION SYNTHESIS",
+      category: "ACTIONABLE ROADMAP",
+      code: "ROAD",
+      title: "Symbiosis Recommendations & Policy Report",
+      indoBox: "Rekomendasi dan Laporan Simbiosis",
+      isAiPillar: false,
+      codeBadge: "bg-teal-100 text-teal-800 border-teal-300",
+      badgeClass: "bg-teal-50 text-teal-800 border-teal-200",
+      description:
+        "Synthesizes recommended network configurations, capacity allocation, multi-currency Capex/Opex valuation, environmental carbon offsets, bottleneck mitigations, and strategic implementation pathways for park administrators.",
+    },
+  ];
 
   const paperCitation =
     "Nurcahyo, Z., Faiza, K. R., Anggoro, D. S., Prasetia, T. A., & Hidayat, A. P. (2026). Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis. Department of Industrial Systems Engineering, IPB University. Prepared for I-SINERGIE Malaysia 2026.";
@@ -262,12 +358,23 @@ export default function MethodologyPage() {
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11.5px] text-slate-600 leading-snug">
-                <strong>Flowchart Source:</strong> Zamzam Nurcahyo et al. (2026), <em>Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis</em>. Ex-ante evaluation integrating Knowledge Graph, GNN, GA, and ABM.
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11.5px] text-slate-600 leading-snug space-y-2">
+                <div>
+                  <strong>Flowchart Source:</strong> Zamzam Nurcahyo et al. (2026), <em>Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis</em>. Ex-ante evaluation integrating Knowledge Graph, GNN, GA, and ABM.
+                </div>
+                <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10.5px] font-mono text-slate-500">
+                  <span className="text-amber-700 font-semibold">• Step 1: Input Data</span>
+                  <span className="text-sky-700 font-semibold">• Step 2: KG (AI 1)</span>
+                  <span className="text-purple-700 font-semibold">• Step 3: Gap Analysis</span>
+                  <span className="text-indigo-700 font-semibold">• Step 4: GNN (AI 2)</span>
+                  <span className="text-emerald-700 font-semibold">• Step 5: GA (AI 3)</span>
+                  <span className="text-rose-700 font-semibold">• Step 6: ABM (AI 4)</span>
+                  <span className="text-teal-700 font-semibold">• Step 7: Symbiosis Report</span>
+                </div>
               </div>
             </div>
 
-            {/* Right: 4 Algorithmic AI Pillars Breakdown */}
+            {/* Right: Methodology Stages & 4 Algorithmic AI Pillars Breakdown */}
             <div className="lg:col-span-6 space-y-4">
               {/* Executive Abstract Card */}
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
@@ -292,86 +399,105 @@ export default function MethodologyPage() {
                 </div>
               </div>
 
-              {/* 4 AI Pillars Cards */}
-              <div className="space-y-3">
-                {/* Pillar 1 */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-[11px] font-mono">
-                        KG
-                      </div>
-                      <h4 className="text-[13px] font-bold text-slate-900">
-                        1. Knowledge Graph (KG) Ecosystem Modeling
-                      </h4>
-                    </div>
-                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                      STEP 2
-                    </span>
+              {/* Methodology Framework Stages Container */}
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-[14px] font-bold text-slate-900 flex items-center gap-2">
+                      <GitBranch className="w-4 h-4 text-[#2c7a4b]" />
+                      <span>Figure 1 Flowchart Breakdown (Steps 1–7)</span>
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Sequential 1:1 mapping with the decision-support flowchart stages
+                    </p>
                   </div>
-                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                    Represents industrial actors, material and energy streams, thermodynamic grades, and transport infrastructure as a dynamic multi-relational graph. Aggregates data through park operators to safeguard proprietary commercial secrets.
-                  </p>
+
+                  {/* Filter Pills */}
+                  <div className="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-medium">
+                    <button
+                      type="button"
+                      onClick={() => setFrameworkView("all")}
+                      className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                        frameworkView === "all"
+                          ? "bg-white text-slate-900 font-bold shadow-xs"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      All 7 Steps (Complete)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFrameworkView("ai")}
+                      className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                        frameworkView === "ai"
+                          ? "bg-[#2c7a4b] text-white font-bold shadow-xs"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      4 AI Pillars Only
+                    </button>
+                  </div>
                 </div>
 
-                {/* Pillar 2 */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-[11px] font-mono">
-                        GNN
-                      </div>
-                      <h4 className="text-[13px] font-bold text-slate-900">
-                        2. Missing Industry Identification (GNN)
-                      </h4>
-                    </div>
-                    <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
-                      STEP 4
+                {/* Sub-notice explaining Step 1 & 3 if AI view is selected */}
+                {frameworkView === "ai" && (
+                  <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950 text-[11.5px] flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>
+                      <strong>Displaying 4 Core AI Pillars:</strong> Knowledge Graph (Step 2), GNN (Step 4), Genetic Algorithm (Step 5), and ABM (Step 6). Foundational Data (Step 1), Gap Analysis (Step 3), and Symbiosis Reporting (Step 7) complete the remaining pipeline stages.
                     </span>
                   </div>
-                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                    Uses Graph Neural Networks to recommend complementary facility types (e.g. CSTR Anaerobic Digesters, Fly Ash Brick Plants, Biomass Pelletizers) that will absorb unutilized by-products and close open material loops.
-                  </p>
-                </div>
+                )}
 
-                {/* Pillar 3 */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px] font-mono">
-                        GA
-                      </div>
-                      <h4 className="text-[13px] font-bold text-slate-900">
-                        3. Configuration Optimization (Genetic Algorithm)
-                      </h4>
-                    </div>
-                    <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                      STEP 5
-                    </span>
-                  </div>
-                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                    Solves multi-objective Pareto optimization across resource utilization, gross economic revenue, transport distances, and avoided emissions subject to capacity and thermodynamic mass-balance constraints.
-                  </p>
-                </div>
+                {/* Steps Cards List */}
+                <div className="space-y-3">
+                  {frameworkSteps
+                    .filter((s) => (frameworkView === "ai" ? s.isAiPillar : true))
+                    .map((step) => (
+                      <div
+                        key={step.stepNumber}
+                        className={`p-4 rounded-xl border transition-all hover:shadow-xs space-y-1.5 ${
+                          step.isAiPillar
+                            ? "bg-white border-slate-200 hover:border-emerald-300"
+                            : "bg-slate-50/70 border-slate-200/80 hover:bg-slate-50"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[10.5px] font-mono border shrink-0 ${step.codeBadge}`}
+                            >
+                              {step.code}
+                            </div>
+                            <div>
+                              <h4 className="text-[13px] font-bold text-slate-900 leading-snug">
+                                {step.stepNumber}. {step.title}
+                              </h4>
+                              <span className="text-[10.5px] font-sans italic text-slate-500 block">
+                                Flowchart Box: &ldquo;{step.indoBox}&rdquo;
+                              </span>
+                            </div>
+                          </div>
 
-                {/* Pillar 4 */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-[11px] font-mono">
-                        ABM
+                          <div className="flex items-center gap-1.5">
+                            {step.isAiPillar ? (
+                              <span className="inline-flex items-center gap-1 text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300">
+                                <Sparkles className="w-3 h-3 text-emerald-600" />
+                                <span>{step.badge}</span>
+                              </span>
+                            ) : (
+                              <span className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded border ${step.badgeClass}`}>
+                                {step.badge}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <p className="text-[11.5px] text-slate-600 leading-relaxed pl-[42px]">
+                          {step.description}
+                        </p>
                       </div>
-                      <h4 className="text-[13px] font-bold text-slate-900">
-                        4. Dynamic Resilience Stress Testing (ABM)
-                      </h4>
-                    </div>
-                    <span className="text-[10px] font-mono text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-                      STEP 6
-                    </span>
-                  </div>
-                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                    Deploys Agent-Based Modeling to simulate behavior under upstream supply disruption (-20% to -80%), facility operating-time downtime, and downstream off-take cancellations, confirming 70%–80% nominal performance retention.
-                  </p>
+                    ))}
                 </div>
               </div>
             </div>
@@ -665,7 +791,7 @@ export default function MethodologyPage() {
                     </p>
                   </div>
                   <a
-                    href="mailto:nczamzam@apps.ipb.ac.id?subject=%5BSymbion%20v2.0%5D%20Academic%20Paper%20Access%20Request%20(I-SINERGIE%20Malaysia)&body=Dear%20Zamzam%20Nurcahyo%20and%20Symbion%20Research%20Team,%0A%0AI%20am%20reviewing%20the%20Symbion%20v2.0%20decision%20engine%20for%20I-SINERGIE%20Malaysia%202026%20and%20would%20like%20to%20request%20access%20to%20the%20full%20academic%20manuscript%20and%20methodology%20appendix.%0A%0AOrganization%20/%20Role:%20%0APurpose%20of%20Request:%20%0A%0ABest%20regards,"
+                    href="mailto:nczamzam@apps.ipb.ac.id?subject=%5BSymbion%20v1.0%5D%20Academic%20Paper%20Access%20Request%20(I-SINERGIE%20Malaysia)&body=Dear%20Zamzam%20Nurcahyo%20and%20Symbion%20Research%20Team,%0A%0AI%20am%20reviewing%20the%20Symbion%20v1.0%20decision%20engine%20for%20I-SINERGIE%20Malaysia%202026%20and%20would%20like%20to%20request%20access%20to%20the%20full%20academic%20manuscript%20and%20methodology%20appendix.%0A%0AOrganization%20/%20Role:%20%0APurpose%20of%20Request:%20%0A%0ABest%20regards,"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2c7a4b] hover:bg-[#23613c] text-white text-[12px] font-semibold transition-colors shadow-xs shrink-0"
                   >
                     <Mail className="w-3.5 h-3.5" />
@@ -708,7 +834,7 @@ export default function MethodologyPage() {
             {/* Modal Footer */}
             <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
               <span className="text-[10.5px] font-mono text-slate-500">
-                Proprietary Academic Intellectual Property • Symbion v2.0
+                Proprietary Academic Intellectual Property • Symbion v1.0
               </span>
               <button
                 type="button"

@@ -122,7 +122,7 @@ export default function LoginPage() {
         <div className="flex items-center gap-2.5 sm:gap-5 text-xs font-medium">
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-xs border border-slate-200 text-slate-700 shadow-2xs font-mono text-[11px]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>System Operational (v2.0)</span>
+            <span>System Operational (v1.0)</span>
           </div>
 
           <button
