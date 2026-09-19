@@ -1,0 +1,579 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import React, { useState } from "react";
+import { useUserSession } from "@/context/user-session-context";
+import { MethodologyCard } from "@/components/interactive/methodology-card";
+import {
+  Binary,
+  Download,
+  Award,
+  GitBranch,
+  Scale,
+  FileText,
+  Building2,
+  ShieldCheck,
+} from "lucide-react";
+
+export default function MethodologyPage() {
+  const { isPartner, isAdmin } = useUserSession();
+  const [activeTab, setActiveTab] = useState<"flowchart" | "cases" | "equations" | "references">("flowchart");
+
+  const handlePrintDossier = () => {
+    if (typeof window !== "undefined") {
+      window.print();
+    }
+  };
+
+  const authors = [
+    { name: "Zamzam Nurcahyo", email: "nczamzam@apps.ipb.ac.id", role: "Principal Investigator" },
+    { name: "Kayla Rahma Faiza", email: "101006kayla@apps.ipb.ac.id", role: "Process Simulation" },
+    { name: "Dhamar Syamhudi Anggoro", email: "dhamar11syamhudi@apps.ipb.ac.id", role: "Optimization & GA" },
+    { name: "Trias Aldi Prasetia", email: "prasetiaalditrias@apps.ipb.ac.id", role: "Techno-Economic Analysis" },
+    { name: "Agung Prayudha Hidayat", email: "agungprayudha@apps.ipb.ac.id", role: "Industrial Systems Engineering" },
+  ];
+
+  const references = [
+    {
+      citation: "Central Electricity Authority. (2022). Report on fly ash generation at coal/lignite based thermal power stations and its utilization in the country for the year 2021–22. Ministry of Power, Government of India.",
+      domain: "Fly Ash Benchmark & National Power Surplus",
+      tag: "GOVERNMENT AUDIT",
+    },
+    {
+      citation: "Fraccascia, L., & Yazan, D. M. (2018). The role of online information-sharing platforms on the performance of industrial symbiosis networks. Resources, Conservation and Recycling, 136, 473–485.",
+      domain: "Information Platforms & Enterprise Confidentiality",
+      tag: "SCOPUS Q1",
+    },
+    {
+      citation: "GAIL (India) Limited. (2021, March 18). GAIL and Ranchi Municipal Corporation sign agreement for setting up compressed biogas plant. GAIL (India) Limited.",
+      domain: "Jhiri CBG 150 t/d Plant Operational Design",
+      tag: "INDUSTRY DATA",
+    },
+    {
+      citation: "Krom, P., Piscicelli, L., & Frenken, K. (2022). Digital platforms for industrial symbiosis. Journal of Innovation Economics & Management, 39(3), 215–240.",
+      domain: "Resource Matchmaking vs. Ecosystem Coordination",
+      tag: "ACADEMIC REVIEW",
+    },
+    {
+      citation: "Kosmadakis, G. (2024). Industrial waste heat potential and heat exploitation solutions. Applied Thermal Engineering, 246, 122957.",
+      domain: "221.32 TWh/yr Industrial Waste Heat Metric",
+      tag: "THERMAL ENG",
+    },
+    {
+      citation: "Kechichian, E. R., Demir Duru, S., Quaranta, D., & Shin, N. Y. (2021). Circular economy in industrial parks: Technologies for competitiveness. World Bank Group.",
+      domain: "World Bank Survey of 438 Global Eco-Industrial Parks",
+      tag: "WORLD BANK",
+    },
+    {
+      citation: "Makropoulos, C., Kritikos, N.-A., & Pantazis, C. (2024). Matchmaking for industrial symbiosis: A digital tool for the identification, quantification and optimisation of symbiotic potential in industrial ecosystems. Frontiers in Chemical Engineering, 6, 1363888.",
+      domain: "Digital Matching & Optimization Frontiers",
+      tag: "FRONTIERS",
+    },
+    {
+      citation: "Yadav, S. (2026, May 23). Ranchi Municipal Corporation boosts biogas plant capacity to 100 tonnes daily. The Times of India.",
+      domain: "Empirical Wet Organic Waste Delivery Rate",
+      tag: "FIELD VERIFICATION",
+    },
+  ];
+
+  return (
+    <div className="space-y-6 font-sans">
+      {/* Role-Differentiated Methodology Context Banner */}
+      {isPartner && (
+        <div className="p-3.5 rounded-xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 flex flex-wrap items-center justify-between gap-3 text-[12px] shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+            <span>
+              <strong>Regional Partner Academic Verification:</strong> Backed by IPB University chemical & industrial systems research, ensuring all feedstock co-digestion stoichiometry and yield forecasts comply with international standards.
+            </span>
+          </div>
+          <span className="font-mono font-bold text-emerald-800 text-[11px] px-2.5 py-0.5 rounded bg-white border border-emerald-300">
+            Partner Audit: Peer Reviewed
+          </span>
+        </div>
+      )}
+
+      {isAdmin && (
+        <div className="p-3.5 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-[12px] shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>
+              <strong>Estate Administrator Decision Framework:</strong> Full access to 14 thermodynamic & economic formulas, 4 AI Pillars (Knowledge Graph, GNN, GA, ABM), and 8 Scopus/Government empirical citations.
+            </span>
+          </div>
+          <span className="font-mono font-bold text-emerald-300 text-[11px] px-2.5 py-0.5 rounded bg-slate-800 border border-slate-700">
+            Scope: Full Theoretical Dossier
+          </span>
+        </div>
+      )}
+
+      {/* 1. ACADEMIC PAPER HEADER BANNER (E-Digest Official Attribution) */}
+      <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-[#14503f] text-white border border-slate-700 shadow-sm space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#2c7a4b] text-white border border-emerald-400/40">
+              I-SINERGIE MALAYSIA 2026
+            </span>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-white/10 text-slate-200 border border-white/20">
+              INTERNATIONAL COMPETITION
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handlePrintDossier}
+            className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[12px] font-semibold border border-white/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Print Academic Dossier</span>
+          </button>
+        </div>
+
+        <div className="space-y-2">
+          <h1 className="text-[20px] md:text-[22px] font-bold text-white tracking-tight leading-snug">
+            Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis
+          </h1>
+          <p className="text-[14px] text-emerald-300 font-medium italic">
+            Enabling Eco-Industrial Park Transformation Through Ecosystem Simulation
+          </p>
+        </div>
+
+        {/* Authors & Institution Strip */}
+        <div className="pt-2 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-[12px] text-slate-300">
+            <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="font-semibold text-white">IPB University, Indonesia</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-slate-300">Department of Industrial Systems Engineering</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 text-[11px] font-mono">
+            {authors.map((author) => (
+              <span
+                key={author.email}
+                className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300 hover:text-emerald-300 transition-colors"
+                title={`${author.role} (${author.email})`}
+              >
+                {author.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. NAVIGATION TABS (Flowchart / Cases / Equations / References) */}
+      <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-xs text-[12.5px] font-medium">
+        <button
+          type="button"
+          onClick={() => setActiveTab("flowchart")}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all ${
+            activeTab === "flowchart"
+              ? "bg-[#2c7a4b] text-white font-bold shadow-xs"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <GitBranch className="w-4 h-4" />
+          <span>Figure 1: Methodology Flowchart & AI Pillars</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("cases")}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all ${
+            activeTab === "cases"
+              ? "bg-[#2c7a4b] text-white font-bold shadow-xs"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Scale className="w-4 h-4" />
+          <span>Empirical Cases (Jhiri & Gadarwara)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("equations")}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all ${
+            activeTab === "equations"
+              ? "bg-[#2c7a4b] text-white font-bold shadow-xs"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <Binary className="w-4 h-4" />
+          <span>Mathematical Derivations & Constants</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("references")}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all ${
+            activeTab === "references"
+              ? "bg-[#2c7a4b] text-white font-bold shadow-xs"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          <span>Literature Citations (8 Works)</span>
+        </button>
+      </div>
+
+      {/* TAB 1: FIGURE 1 METHODOLOGY FLOWCHART & 4 AI PILLARS */}
+      {activeTab === "flowchart" && (
+        <div className="space-y-6">
+          {/* Methodology Figure 1 Split Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Left: Interactive Diagram Viewer */}
+            <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <GitBranch className="w-4 h-4 text-[#2c7a4b]" />
+                  <h2 className="text-[14px] font-bold text-slate-900">
+                    Figure 1: Symbion Decision-Support Framework Flowchart
+                  </h2>
+                </div>
+                <span className="text-[10.5px] font-mono text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  EMPIRICAL ARCHITECTURE
+                </span>
+              </div>
+
+              {/* Diagram Container */}
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/images/edigest_figure1.png"
+                  alt="Figure 1: Symbion Decision-Support Framework Flowchart"
+                  className="w-full max-h-[620px] object-contain rounded-lg border border-slate-200/60 shadow-xs bg-white"
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11.5px] text-slate-600 leading-snug">
+                <strong>Flowchart Source:</strong> Zamzam Nurcahyo et al. (2026), <em>Symbion: AI-Driven Decision Support for Resilient Industrial Symbiosis</em>. Ex-ante evaluation integrating Knowledge Graph, GNN, GA, and ABM.
+              </div>
+            </div>
+
+            {/* Right: 4 Algorithmic AI Pillars Breakdown */}
+            <div className="lg:col-span-6 space-y-4">
+              {/* Executive Abstract Card */}
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <h3 className="text-[14px] font-bold text-slate-900 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[#2c7a4b]" />
+                  <span>The Core Scientific Paradigm Shift</span>
+                </h3>
+                <p className="text-[12.5px] text-slate-600 leading-relaxed">
+                  Existing digital symbiosis platforms mainly match companies already registered within a network and rarely test how fluctuating supply affects long-term viability. Symbion shifts industrial symbiosis from <strong>passive resource matchmaking</strong> to <strong>proactive ecosystem design</strong> — identifying missing industrial functions and testing whether newly introduced facilities survive dynamic operational shocks.
+                </p>
+                <div className="grid grid-cols-2 gap-3 pt-1 text-[11.5px] font-mono">
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="text-slate-400 block text-[10px]">WORLD BANK BENCHMARK</span>
+                    <strong className="text-slate-800 text-[13px]">438 Parks</strong>
+                    <span className="text-slate-500 block text-[10.5px]">Only 57.5% circular</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="text-slate-400 block text-[10px]">EU/UK WASTE HEAT</span>
+                    <strong className="text-emerald-700 text-[13px]">221.32 TWh/yr</strong>
+                    <span className="text-slate-500 block text-[10.5px]">Untapped potential</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4 AI Pillars Cards */}
+              <div className="space-y-3">
+                {/* Pillar 1 */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        KG
+                      </div>
+                      <h4 className="text-[13px] font-bold text-slate-900">
+                        1. Knowledge Graph (KG) Ecosystem Modeling
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-sky-700 font-bold bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                      STEP 2
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                    Represents industrial actors, material and energy streams, thermodynamic grades, and transport infrastructure as a dynamic multi-relational graph. Aggregates data through park operators to safeguard proprietary commercial secrets.
+                  </p>
+                </div>
+
+                {/* Pillar 2 */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        GNN
+                      </div>
+                      <h4 className="text-[13px] font-bold text-slate-900">
+                        2. Missing Industry Identification (GNN)
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                      STEP 4
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                    Uses Graph Neural Networks to recommend complementary facility types (e.g. CSTR Anaerobic Digesters, Fly Ash Brick Plants, Biomass Pelletizers) that will absorb unutilized by-products and close open material loops.
+                  </p>
+                </div>
+
+                {/* Pillar 3 */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        GA
+                      </div>
+                      <h4 className="text-[13px] font-bold text-slate-900">
+                        3. Configuration Optimization (Genetic Algorithm)
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      STEP 5
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                    Solves multi-objective Pareto optimization across resource utilization, gross economic revenue, transport distances, and avoided emissions subject to capacity and thermodynamic mass-balance constraints.
+                  </p>
+                </div>
+
+                {/* Pillar 4 */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        ABM
+                      </div>
+                      <h4 className="text-[13px] font-bold text-slate-900">
+                        4. Dynamic Resilience Stress Testing (ABM)
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                      STEP 6
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                    Deploys Agent-Based Modeling to simulate behavior under upstream supply disruption (-20% to -80%), facility operating-time downtime, and downstream off-take cancellations, confirming 70%–80% nominal performance retention.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: EMPIRICAL CASE DEMONSTRATIONS */}
+      {activeTab === "cases" && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Case 1: GAIL Jhiri CBG */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                  <span className="text-[10.5px] font-mono font-bold uppercase text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-200">
+                    CASE STUDY 1: INPUT DEFICIT
+                  </span>
+                  <h3 className="text-[16px] font-bold text-slate-900 mt-1.5">
+                    GAIL Compressed Biogas (CBG) Plant
+                  </h3>
+                  <span className="text-[12px] text-slate-500 font-mono">
+                    Jhiri, Ranchi, Jharkhand, India
+                  </span>
+                </div>
+                <div className="text-right font-mono">
+                  <span className="text-[20px] font-extrabold text-[#2c7a4b] block">88.33%</span>
+                  <span className="text-[10.5px] text-slate-400">Capacity Restored</span>
+                </div>
+              </div>
+
+              <div className="space-y-3 text-[12.5px] text-slate-600 leading-relaxed">
+                <p>
+                  <strong>Imbalance Problem:</strong> Designed for 150 tonnes/day wet organic waste, operating at only 80 tonnes/day (53.33% capacity utilization) due to municipal segregation constraints, leaving an unutilized capacity gap of 70 t/day.
+                </p>
+                <p>
+                  <strong>Symbion Intervention:</strong> Sourced regional organic wastes (vegetable market sludge, agro-industrial manure) under representative α = 75% fulfillment (+52.5 t/d), increasing throughput to 132.5 t/day (88.33% utilization).
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-[11px] font-mono text-center">
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">CAPACITY GAIN</span>
+                  <strong className="text-emerald-700 text-[13px]">+65.6%</strong>
+                  <span className="text-slate-500 block text-[9px]">Relative Boost</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">GROSS REVENUE</span>
+                  <strong className="text-slate-900 text-[13px]">₹4.21 Cr/yr</strong>
+                  <span className="text-slate-500 block text-[9px]">RM 2.37M / $510k</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">OFFSET CO₂</span>
+                  <strong className="text-teal-700 text-[13px]">1,685 t/yr</strong>
+                  <span className="text-slate-500 block text-[9px]">Fossil Displaced</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Case 2: NTPC Gadarwara STPS */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                  <span className="text-[10.5px] font-mono font-bold uppercase text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded border border-sky-200">
+                    CASE STUDY 2: OUTPUT SURPLUS
+                  </span>
+                  <h3 className="text-[16px] font-bold text-slate-900 mt-1.5">
+                    Gadarwara Super Thermal Power Station
+                  </h3>
+                  <span className="text-[12px] text-slate-500 font-mono">
+                    NTPC (2 × 800 MW), Madhya Pradesh, India
+                  </span>
+                </div>
+                <div className="text-right font-mono">
+                  <span className="text-[20px] font-extrabold text-sky-700 block">1.685M t</span>
+                  <span className="text-[10.5px] text-slate-400">Annual Ash Volume</span>
+                </div>
+              </div>
+
+              <div className="space-y-3 text-[12.5px] text-slate-600 leading-relaxed">
+                <p>
+                  <strong>Imbalance Problem:</strong> Generates 1,685,000 tonnes/year pulverized coal fly ash. Only 634,300 tonnes utilized in cement blending, leaving 1,050,700 tonnes/year (62.35%) unutilized surplus dumped into containment lagoons.
+                </p>
+                <p>
+                  <strong>Symbion Intervention:</strong> Identifies missing industrial functions: on-site fly ash brick manufacturing units, Pozzolanic cement (PPC) clinker replacement, and highway embankment stabilization corridors within a 50 km logistics radius.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-[11px] font-mono text-center">
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">UNUTILIZED POOL</span>
+                  <strong className="text-rose-700 text-[13px]">1.05M t/yr</strong>
+                  <span className="text-slate-500 block text-[9px]">62.35% Surplus</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">RECOMMENDED SINK</span>
+                  <strong className="text-slate-900 text-[13px]">Brick & Roads</strong>
+                  <span className="text-slate-500 block text-[9px]">Eco-Materials</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-[9.5px]">CIRCULAR RECOVERY</span>
+                  <strong className="text-emerald-700 text-[13px]">100%</strong>
+                  <span className="text-slate-500 block text-[9px]">Zero Landfill Target</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: MATHEMATICAL DERIVATIONS & THERMODYNAMIC CONSTANTS */}
+      {activeTab === "equations" && (
+        <div className="space-y-6">
+          <MethodologyCard />
+
+          {/* Thermodynamic Constants Table */}
+          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <Binary className="w-5 h-5 text-primary" />
+                <h2 className="text-[15px] font-bold text-slate-900">
+                  Thermodynamic Parameters & Empirical Constants
+                </h2>
+              </div>
+              <span className="text-[11px] font-mono text-slate-500 font-semibold">
+                CERTIFIED PHYSICAL CONSTANTS
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-[12.5px] border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-left font-mono text-[11px] text-slate-500 uppercase">
+                    <th className="py-2.5 px-3">Symbol</th>
+                    <th className="py-2.5 px-3">Parameter Description</th>
+                    <th className="py-2.5 px-3">Standard Value</th>
+                    <th className="py-2.5 px-3">Unit</th>
+                    <th className="py-2.5 px-3">Empirical Source</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-sans">
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">HHV_CBG</td>
+                    <td className="py-3 px-3 font-medium text-slate-900">Compressed Biogas Higher Heating Value</td>
+                    <td className="py-3 px-3 font-mono font-bold text-emerald-700">52.0</td>
+                    <td className="py-3 px-3 font-mono text-slate-600">MJ / kg</td>
+                    <td className="py-3 px-3 text-slate-500 text-[11.5px]">SATAT / MoPNG Technical Standards (95% CH₄)</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">C_MMBtu</td>
+                    <td className="py-3 px-3 font-medium text-slate-900">British Thermal Unit Equivalent Conversion</td>
+                    <td className="py-3 px-3 font-mono font-bold text-sky-700">1,055.06</td>
+                    <td className="py-3 px-3 font-mono text-slate-600">MJ / MMBtu</td>
+                    <td className="py-3 px-3 text-slate-500 text-[11.5px]">ISO 13686 Natural Gas Measurement Standard</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">P_CBG</td>
+                    <td className="py-3 px-3 font-medium text-slate-900">SATAT Fixed Commercial Procurement Price</td>
+                    <td className="py-3 px-3 font-mono font-bold text-amber-700">1,478.0</td>
+                    <td className="py-3 px-3 font-mono text-slate-600">INR / MMBtu</td>
+                    <td className="py-3 px-3 text-slate-500 text-[11.5px]">GAIL & Indian Oil SATAT Public Tariff Sheet</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">EF_NG</td>
+                    <td className="py-3 px-3 font-medium text-slate-900">Natural Gas Displaced Combustion Emission Factor</td>
+                    <td className="py-3 px-3 font-mono font-bold text-rose-700">56.1</td>
+                    <td className="py-3 px-3 font-mono text-slate-600">kg CO₂ / GJ</td>
+                    <td className="py-3 px-3 text-slate-500 text-[11.5px]">IPCC Guidelines for National GHG Inventories</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">t_op</td>
+                    <td className="py-3 px-3 font-medium text-slate-900">Annual Effective Plant Operating Days</td>
+                    <td className="py-3 px-3 font-mono font-bold text-slate-800">330</td>
+                    <td className="py-3 px-3 font-mono text-slate-600">Days / Year</td>
+                    <td className="py-3 px-3 text-slate-500 text-[11.5px]">Standard Industrial Availability (35 days maintenance)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: LITERATURE CITATIONS & REFERENCES */}
+      {activeTab === "references" && (
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-[#2c7a4b]" />
+              <h2 className="text-[15px] font-bold text-slate-900">
+                Official Literature & Policy Citation Registry
+              </h2>
+            </div>
+            <span className="text-[11px] font-mono text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
+              8 PEER-REVIEWED SOURCES
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {references.map((ref, idx) => (
+              <div
+                key={ref.citation}
+                className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-2 hover:bg-slate-50 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-bold text-slate-500">
+                    [{idx + 1}] {ref.domain}
+                  </span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white text-slate-700 border border-slate-200">
+                    {ref.tag}
+                  </span>
+                </div>
+                <p className="text-[12.5px] text-slate-800 font-serif leading-relaxed">
+                  {ref.citation}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
