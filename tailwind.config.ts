@@ -59,8 +59,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["'Inter'", "var(--font-geist-sans)", "system-ui", "sans-serif"],
-        mono: ["'Inter'", "var(--font-geist-sans)", "system-ui", "sans-serif"],
+        sans: ["var(--font-ui)"],
+        mono: ["var(--font-ui)"],
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgba(15, 23, 42, 0.04)",

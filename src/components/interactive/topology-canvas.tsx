@@ -60,6 +60,8 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
   const isJhiri = currentCase.id === "jhiri-cbg";
   const [activeFilter, setActiveFilter] = useState<"all" | "feedstock" | "outputs">("all");
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState<"inputs" | "hub" | "outputs">("inputs");
 
   const [nodes, setNodes] = useState<Record<string, NodePosition>>(() =>
     calculateDefaultNodes(isJhiri, 1050)
@@ -81,6 +83,40 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
     setNodes(calculateDefaultNodes(isJhiri, width));
   };
 
+  // Scroll section tracking
+  useEffect(() => {
+    const el = scrollWrapperRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 0) return;
+      const ratio = el.scrollLeft / maxScroll;
+      if (ratio < 0.25) setActiveSection("inputs");
+      else if (ratio > 0.75) setActiveSection("outputs");
+      else setActiveSection("hub");
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (section: "inputs" | "hub" | "outputs") => {
+    const el = scrollWrapperRef.current;
+    if (!el) return;
+    setActiveSection(section);
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) return;
+
+    if (section === "inputs") {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (section === "hub") {
+      el.scrollTo({ left: maxScroll / 2, behavior: "smooth" });
+    } else if (section === "outputs") {
+      el.scrollTo({ left: maxScroll, behavior: "smooth" });
+    }
+  };
+
   // Dragging state
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const dragStartPos = useRef<{ mouseX: number; mouseY: number; nodeX: number; nodeY: number }>({
@@ -92,8 +128,15 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
   const handlePointerDown = (id: string, e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const node = nodes[id];
     if (!node) return;
+
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      // Safe fallback
+    }
 
     setDraggingId(id);
     dragStartPos.current = {
@@ -148,12 +191,46 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
     if (draggingId) {
       window.addEventListener("pointermove", handlePointerMove);
       window.addEventListener("pointerup", handlePointerUp);
+      window.addEventListener("pointercancel", handlePointerUp);
     }
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
     };
   }, [draggingId, handlePointerMove, handlePointerUp]);
+
+  // Background desktop drag-to-scroll
+  const isPanningRef = useRef(false);
+  const panStartRef = useRef({ x: 0, scrollLeft: 0 });
+
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("[data-draggable-node]")) return;
+    isPanningRef.current = true;
+    panStartRef.current = {
+      x: e.clientX,
+      scrollLeft: scrollWrapperRef.current?.scrollLeft || 0,
+    };
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isPanningRef.current || !scrollWrapperRef.current) return;
+      const deltaX = e.clientX - panStartRef.current.x;
+      scrollWrapperRef.current.scrollLeft = panStartRef.current.scrollLeft - deltaX;
+    };
+
+    const handleMouseUp = () => {
+      isPanningRef.current = false;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
 
   // Cubic Bezier path generator connecting source right-edge to target left-edge
   const createPath = (sourceId: string, targetId: string) => {
@@ -205,10 +282,42 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
         {/* Right Tools & Reset */}
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-          {/* Mobile Swipe Hint */}
-          <span className="inline-flex xl:hidden items-center gap-1 px-2 py-1 rounded bg-sky-50 text-sky-800 text-[10px] font-mono font-bold border border-sky-200">
-            Swipe canvas ↔
-          </span>
+          {/* Mobile Quick Jump / Swipe Navigation */}
+          <div className="flex xl:hidden items-center gap-1 bg-slate-200/80 p-0.5 rounded-lg text-[10px] font-mono font-bold">
+            <button
+              type="button"
+              onClick={() => scrollToSection("inputs")}
+              className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                activeSection === "inputs"
+                  ? "bg-white text-emerald-800 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Inputs
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("hub")}
+              className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                activeSection === "hub"
+                  ? "bg-white text-primary shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Hub
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("outputs")}
+              className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                activeSection === "outputs"
+                  ? "bg-white text-blue-800 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Outputs
+            </button>
+          </div>
 
           {/* Stream Filter Buttons */}
           <div className="flex items-center p-0.5 rounded-lg bg-slate-200/70 text-[10px] sm:text-[11px] font-mono font-medium">
@@ -260,11 +369,15 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
         </div>
       </div>
 
-      {/* Main Interactive Canvas with Horizontal Touch Panning */}
-      <div className="relative w-full overflow-x-auto overflow-y-hidden touch-pan-x">
+      {/* Main Interactive Canvas with Horizontal Touch & Drag Panning */}
+      <div
+        ref={scrollWrapperRef}
+        className="relative w-full overflow-x-auto overflow-y-hidden touch-pan-x scroll-smooth select-none cursor-default"
+      >
         <div
           ref={containerRef}
-          className="relative min-w-[880px] w-full h-[470px] bg-gradient-to-b from-slate-50/60 to-white overflow-hidden select-none touch-none"
+          onMouseDown={handleCanvasMouseDown}
+          className="relative min-w-[880px] w-full h-[470px] bg-gradient-to-b from-slate-50/60 to-white overflow-hidden select-none touch-pan-x"
         >
         {/* Crisp Technical Grid Texture */}
         <svg className="absolute inset-0 w-full h-full opacity-45 pointer-events-none">
@@ -476,12 +589,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
           <>
             {/* NODE 1: Municipal Waste */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.muni?.x ?? 24}px, ${nodes.muni?.y ?? 35}px, 0)`,
                 width: nodes.muni?.w ?? 220,
               }}
               onPointerDown={(e) => handlePointerDown("muni", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "muni" ? "shadow-lg ring-2 ring-primary/40 border-primary" : "border-slate-200 hover:border-slate-300"
               }`}
             >
@@ -504,12 +618,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* NODE 2: Agri Mandi Waste */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.agri?.x ?? 24}px, ${nodes.agri?.y ?? 280}px, 0)`,
                 width: nodes.agri?.w ?? 220,
               }}
               onPointerDown={(e) => handlePointerDown("agri", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-emerald-50/50 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-emerald-50/50 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "agri" ? "shadow-lg ring-2 ring-emerald-500/40 border-emerald-500" : "border-emerald-300 hover:border-emerald-400"
               }`}
             >
@@ -532,12 +647,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* NODE 3: Central CBG Hub */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.hub?.x ?? 370}px, ${nodes.hub?.y ?? 135}px, 0)`,
                 width: nodes.hub?.w ?? 250,
               }}
               onPointerDown={(e) => handlePointerDown("hub", e)}
-              className={`absolute top-0 left-0 p-4 rounded-xl border-2 bg-white shadow-md transition-shadow cursor-grab active:cursor-grabbing z-30 ${
+              className={`absolute top-0 left-0 p-4 rounded-xl border-2 bg-white shadow-md transition-shadow cursor-grab active:cursor-grabbing z-30 touch-none select-none ${
                 draggingId === "hub" ? "shadow-xl ring-2 ring-primary/40 border-primary" : "border-primary/40 hover:border-primary"
               }`}
             >
@@ -577,12 +693,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* NODE 4: CBG Sink */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.cbg?.x ?? 740}px, ${nodes.cbg?.y ?? 35}px, 0)`,
                 width: nodes.cbg?.w ?? 230,
               }}
               onPointerDown={(e) => handlePointerDown("cbg", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "cbg" ? "shadow-lg ring-2 ring-blue-500/40 border-blue-400" : "border-blue-200 hover:border-blue-300"
               }`}
             >
@@ -605,12 +722,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* NODE 5: FOM Sink */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.fom?.x ?? 740}px, ${nodes.fom?.y ?? 280}px, 0)`,
                 width: nodes.fom?.w ?? 230,
               }}
               onPointerDown={(e) => handlePointerDown("fom", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "fom" ? "shadow-lg ring-2 ring-emerald-500/40 border-emerald-400" : "border-emerald-200 hover:border-emerald-300"
               }`}
             >
@@ -636,12 +754,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
           <>
             {/* NTPC Generation Node */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.ntpc?.x ?? 24}px, ${nodes.ntpc?.y ?? 155}px, 0)`,
                 width: nodes.ntpc?.w ?? 260,
               }}
               onPointerDown={(e) => handlePointerDown("ntpc", e)}
-              className={`absolute top-0 left-0 p-4 rounded-xl border-2 bg-white shadow-md cursor-grab active:cursor-grabbing z-30 ${
+              className={`absolute top-0 left-0 p-4 rounded-xl border-2 bg-white shadow-md cursor-grab active:cursor-grabbing z-30 touch-none select-none ${
                 draggingId === "ntpc" ? "shadow-xl ring-2 ring-slate-400 border-slate-700" : "border-slate-300 hover:border-slate-400"
               }`}
             >
@@ -663,12 +782,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* Cement Node */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.cement?.x ?? 690}px, ${nodes.cement?.y ?? 40}px, 0)`,
                 width: nodes.cement?.w ?? 260,
               }}
               onPointerDown={(e) => handlePointerDown("cement", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "cement" ? "shadow-lg ring-2 ring-sky-400 border-sky-400" : "border-sky-300 hover:border-sky-400"
               }`}
             >
@@ -689,12 +809,13 @@ export function TopologyCanvas({ currentCase, scenario }: TopologyCanvasProps) {
 
             {/* Surplus Risk Node */}
             <div
+              data-draggable-node="true"
               style={{
                 transform: `translate3d(${nodes.surplus?.x ?? 690}px, ${nodes.surplus?.y ?? 265}px, 0)`,
                 width: nodes.surplus?.w ?? 260,
               }}
               onPointerDown={(e) => handlePointerDown("surplus", e)}
-              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs cursor-grab active:cursor-grabbing z-20 ${
+              className={`absolute top-0 left-0 p-3.5 rounded-xl border bg-white shadow-xs cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
                 draggingId === "surplus" ? "shadow-lg ring-2 ring-rose-400 border-rose-400" : "border-rose-300 hover:border-rose-400"
               }`}
             >

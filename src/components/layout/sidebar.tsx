@@ -14,6 +14,7 @@ import {
   Building2,
 } from "lucide-react";
 import { APP_NAVIGATION } from "@/components/layout/navigation-config";
+import { CurrencyToggle } from "@/components/ui/currency-toggle";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,8 +23,15 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
   const pathname = usePathname();
-  const { currentCaseId, setCurrentCaseId, setIsSandboxOpen, isJhiri, scenario } =
-    useSymbion();
+  const {
+    currentCaseId,
+    setCurrentCaseId,
+    setIsSandboxOpen,
+    isJhiri,
+    scenario,
+    currency,
+    setCurrency,
+  } = useSymbion();
   const { currentUser, isPartner, isLoggedOut, switchRole } = useUserSession();
 
   const currentPath = pathname || "/";
@@ -185,6 +193,17 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
               <span className="truncate">Node: Subang Sawit A4 Feedstock</span>
             </div>
           )}
+        </div>
+
+        {/* Currency Switcher inside Mobile Drawer */}
+        <div className="px-3 py-2 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between lg:hidden">
+          <span className="text-[10px] font-mono uppercase font-bold text-slate-500 tracking-wider">
+            Currency
+          </span>
+          <CurrencyToggle
+            currentCurrency={currency}
+            onCurrencyChange={setCurrency}
+          />
         </div>
 
         {APP_NAVIGATION.map((section, sectionIndex) => (

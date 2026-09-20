@@ -49,7 +49,15 @@ export function ExecutiveSymbiosisGrid() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
   const [nodes, setNodes] = useState<Record<string, NodePosition>>(() => calculateDefaultNodes(520));
+
+  const scrollToSide = (side: "left" | "right") => {
+    const el = scrollWrapperRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    el.scrollTo({ left: side === "left" ? 0 : maxScroll, behavior: "smooth" });
+  };
 
   // Initialize and track container width
   useEffect(() => {
@@ -81,8 +89,15 @@ export function ExecutiveSymbiosisGrid() {
 
   const handlePointerDown = (id: string, e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const node = nodes[id];
     if (!node) return;
+
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      // Safe fallback
+    }
 
     setDraggingId(id);
     dragStartPos.current = {
@@ -135,12 +150,46 @@ export function ExecutiveSymbiosisGrid() {
     if (draggingId) {
       window.addEventListener("pointermove", handlePointerMove);
       window.addEventListener("pointerup", handlePointerUp);
+      window.addEventListener("pointercancel", handlePointerUp);
     }
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
     };
   }, [draggingId, handlePointerMove, handlePointerUp]);
+
+  // Background desktop drag-to-scroll
+  const isPanningRef = useRef(false);
+  const panStartRef = useRef({ x: 0, scrollLeft: 0 });
+
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("[data-draggable-node]")) return;
+    isPanningRef.current = true;
+    panStartRef.current = {
+      x: e.clientX,
+      scrollLeft: scrollWrapperRef.current?.scrollLeft || 0,
+    };
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isPanningRef.current || !scrollWrapperRef.current) return;
+      const deltaX = e.clientX - panStartRef.current.x;
+      scrollWrapperRef.current.scrollLeft = panStartRef.current.scrollLeft - deltaX;
+    };
+
+    const handleMouseUp = () => {
+      isPanningRef.current = false;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
 
   // Cubic Bezier path generator connecting source card to target card
   const createPath = (sourceId: string, targetId: string) => {
@@ -264,6 +313,24 @@ export function ExecutiveSymbiosisGrid() {
               </button>
             </div>
 
+            {/* Mobile Quick Jump / Swipe Navigation */}
+            <div className="flex sm:hidden items-center gap-1 bg-slate-200/80 p-0.5 rounded-lg text-[9.5px] font-mono font-bold">
+              <button
+                type="button"
+                onClick={() => scrollToSide("left")}
+                className="px-1.5 py-0.5 rounded bg-white text-slate-700 shadow-xs border border-slate-200 cursor-pointer hover:text-slate-900"
+              >
+                Inputs
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSide("right")}
+                className="px-1.5 py-0.5 rounded bg-white text-slate-700 shadow-xs border border-slate-200 cursor-pointer hover:text-slate-900"
+              >
+                Off-takers
+              </button>
+            </div>
+
             {/* Reset Positions Button */}
             <button
               type="button"
@@ -291,10 +358,14 @@ export function ExecutiveSymbiosisGrid() {
         </div>
 
         {/* Responsive Canvas Viewport with Horizontal Touch Panning */}
-        <div className="relative w-full overflow-x-auto overflow-y-hidden touch-pan-x">
+        <div
+          ref={scrollWrapperRef}
+          className="relative w-full overflow-x-auto overflow-y-hidden touch-pan-x scroll-smooth select-none cursor-default"
+        >
           <div
             ref={containerRef}
-            className="relative min-w-[500px] sm:min-w-0 w-full h-[370px] bg-[#f8fafc] overflow-hidden select-none touch-none"
+            onMouseDown={handleCanvasMouseDown}
+            className="relative min-w-[500px] sm:min-w-0 w-full h-[370px] bg-[#f8fafc] overflow-hidden select-none touch-pan-x"
           >
           {/* Engineering Dot Grid Background */}
           <svg className="absolute inset-0 w-full h-full opacity-35 pointer-events-none">
@@ -531,12 +602,13 @@ export function ExecutiveSymbiosisGrid() {
           {/* DRAGGABLE NODE CARDS (HTML DOM) */}
           {/* Node 1: Ranchi Municipal Core (Top Left) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.municipal?.x ?? 14}px, ${nodes.municipal?.y ?? 16}px, 0)`,
               width: nodes.municipal?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("municipal", e)}
-            className={`absolute top-0 left-0 bg-white rounded-xl border p-2.5 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-white rounded-xl border p-2.5 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "municipal"
                 ? "shadow-xl ring-2 ring-[#2c7a4b]/50 border-[#2c7a4b] scale-[1.02]"
                 : "border-slate-200 hover:border-slate-300"
@@ -560,12 +632,13 @@ export function ExecutiveSymbiosisGrid() {
 
           {/* Node 2: Pandra Wholesale Mandi (Middle Left) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.mandi?.x ?? 14}px, ${nodes.mandi?.y ?? 136}px, 0)`,
               width: nodes.mandi?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("mandi", e)}
-            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "mandi"
                 ? "shadow-xl ring-2 ring-amber-500/50 border-amber-500 scale-[1.02]"
                 : "border-slate-200 hover:border-slate-300"
@@ -589,12 +662,13 @@ export function ExecutiveSymbiosisGrid() {
 
           {/* Node 3: Regional Agro Units (Bottom Left) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.biomass?.x ?? 14}px, ${nodes.biomass?.y ?? 254}px, 0)`,
               width: nodes.biomass?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("biomass", e)}
-            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "biomass"
                 ? "shadow-xl ring-2 ring-teal-500/50 border-teal-500 scale-[1.02]"
                 : "border-slate-200 hover:border-slate-300"
@@ -618,12 +692,13 @@ export function ExecutiveSymbiosisGrid() {
 
           {/* Node 4: GAIL CBG Plant, Jhiri (Top Right) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.cbgPlant?.x ?? 320}px, ${nodes.cbgPlant?.y ?? 16}px, 0)`,
               width: nodes.cbgPlant?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("cbgPlant", e)}
-            className={`absolute top-0 left-0 bg-emerald-50/90 rounded-xl border p-2.5 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-emerald-50/90 rounded-xl border p-2.5 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "cbgPlant"
                 ? "shadow-xl ring-2 ring-[#2c7a4b]/50 border-[#2c7a4b] scale-[1.02]"
                 : "border-emerald-300 hover:border-emerald-400"
@@ -649,12 +724,13 @@ export function ExecutiveSymbiosisGrid() {
 
           {/* Node 5: City Gas Distribution Grid (Middle Right) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.cgd?.x ?? 320}px, ${nodes.cgd?.y ?? 136}px, 0)`,
               width: nodes.cgd?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("cgd", e)}
-            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "cgd"
                 ? "shadow-xl ring-2 ring-sky-500/50 border-sky-500 scale-[1.02]"
                 : "border-slate-200 hover:border-slate-300"
@@ -678,12 +754,13 @@ export function ExecutiveSymbiosisGrid() {
 
           {/* Node 6: Jharkhand Organic Farmers FPO (Bottom Right) */}
           <div
+            data-draggable-node="true"
             style={{
               transform: `translate3d(${nodes.fom?.x ?? 320}px, ${nodes.fom?.y ?? 254}px, 0)`,
               width: nodes.fom?.w ?? 175,
             }}
             onPointerDown={(e) => handlePointerDown("fom", e)}
-            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 ${
+            className={`absolute top-0 left-0 bg-white rounded-xl border p-2 shadow-xs transition-shadow cursor-grab active:cursor-grabbing z-20 touch-none select-none ${
               draggingId === "fom"
                 ? "shadow-xl ring-2 ring-emerald-500/50 border-emerald-500 scale-[1.02]"
                 : "border-slate-200 hover:border-slate-300"

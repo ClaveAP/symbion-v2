@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { SymbionProvider, useSymbion } from "@/context/symbion-context";
@@ -41,18 +42,36 @@ function ShellInner({ children }: { children: React.ReactNode }) {
       </a>
 
       {/* Mobile Top Bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-3 sm:px-4 shadow-xs lg:hidden">
-        <div className="flex items-center gap-2 min-w-0">
-          <div>
-            <div className="text-[13.5px] font-bold text-slate-900 leading-none">
-              Symbion <span className="text-[#2c7a4b] text-[10px] font-mono font-bold">v2.0</span>
-            </div>
-            <div className="text-[9.5px] font-semibold text-slate-500 mt-0.5 truncate">
-              Industrial decision engine
-            </div>
+      <header className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white/95 backdrop-blur-md px-3 sm:px-4 shadow-xs lg:hidden select-none">
+        {/* Left: Brand Logo & Title (Protected against shrinking) */}
+        <Link href="/" className="flex items-center gap-2 shrink-0 group">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0">
+            <Image
+              src="/images/symbion-logo.png"
+              alt="Symbion Logo"
+              width={26}
+              height={26}
+              className="object-contain transition-transform group-hover:scale-105"
+              priority
+            />
           </div>
-        </div>
-        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          <div className="flex flex-col leading-none">
+            <div className="flex items-center gap-1">
+              <span className="text-[13.5px] sm:text-[14px] font-bold text-slate-900 tracking-tight">
+                Symbion
+              </span>
+              <span className="text-[9.5px] font-mono text-[#2c7a4b] font-bold">
+                v2.0
+              </span>
+            </div>
+            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider font-semibold mt-0.5 hidden sm:block">
+              Decision Engine
+            </span>
+          </div>
+        </Link>
+
+        {/* Right: Currency Toggle + Profile Avatar + Navigation Menu */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Mobile Currency Switcher */}
           <CurrencyToggle
             currentCurrency={currency}
@@ -69,12 +88,12 @@ function ShellInner({ children }: { children: React.ReactNode }) {
             aria-controls="application-navigation"
             aria-expanded={isNavigationOpen}
             aria-label={isNavigationOpen ? "Close navigation" : "Open navigation"}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 transition-colors cursor-pointer"
           >
-            {isNavigationOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isNavigationOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
           </button>
         </div>
-      </div>
+      </header>
 
       {isNavigationOpen && (
         <button

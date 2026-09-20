@@ -113,7 +113,7 @@ export default function LoginPage() {
               Symbion
             </span>
             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#2c7a4b] border border-emerald-200 uppercase tracking-wider">
-              v2.0 PLATFORM
+              V2.0 PLATFORM
             </span>
           </div>
         </div>

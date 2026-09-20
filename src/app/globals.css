@@ -1,12 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+@font-face {
+  font-family: 'JetBrains Mono Digits';
+  src: url('./fonts/JetBrainsMono-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --font-ui: 'Inter', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+    --font-ui: 'JetBrains Mono Digits', 'Inter', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   }
 
   *, ::before, ::after {
@@ -43,7 +52,7 @@
     font-family: var(--font-ui) !important;
   }
 
-  /* Preserve numeric alignment without introducing a second typeface. */
+  /* Keep numeric columns aligned while JetBrains Mono supplies digit glyphs. */
   .font-mono,
   .tabular-nums,
   svg text {
