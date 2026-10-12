@@ -3,7 +3,6 @@
 import React from "react";
 import { useSymbion } from "@/context/symbion-context";
 import { useUserSession } from "@/context/user-session-context";
-import { ImpactCards } from "@/components/interactive/impact-cards";
 import { CarbonAccountingSummary } from "@/components/interactive/carbon-accounting-summary";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatCurrency } from "@/lib/currency";
@@ -84,11 +83,6 @@ export default function ImpactPage() {
 
       {isJhiri ? (
         <>
-          {/* Main Interactive Impact Cards */}
-          <div className="space-y-4">
-            <ImpactCards scenario={scenario} currency={currency} />
-          </div>
-
           {/* Step-by-Step Conversion Pipeline & Energy Waterfall */}
           <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
