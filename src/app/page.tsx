@@ -567,7 +567,55 @@ export default function ExecutiveOverviewPage() {
         </div>
       </section>
 
-      <ExecutiveSymbiosisGrid />
+      {isJhiri ? (
+        <ExecutiveSymbiosisGrid />
+      ) : (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[11px] font-mono font-bold uppercase border border-amber-200">
+                OUTPUT SURPLUS SINK MODEL
+              </div>
+              <h2 className="text-[18px] font-bold text-slate-900 tracking-tight">
+                NTPC Gadarwara Combustion Fly Ash Allocation Stream
+              </h2>
+              <p className="text-[13px] text-slate-600">
+                1.685M t/year generation balance routed between baseline cement manufacturing and unutilized slurry pond reclamation.
+              </p>
+            </div>
+            <Link
+              href="/topology"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2c7a4b] text-white text-[12.5px] font-bold hover:bg-[#23633d] transition-all shadow-xs shrink-0 self-start sm:self-center"
+            >
+              <span>Explore Interactive Bipartite Canvas</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10.5px] font-mono uppercase font-bold text-slate-400">Primary Generator</span>
+              <div className="text-[16px] font-bold text-slate-900">NTPC Gadarwara STPS</div>
+              <div className="text-[12px] text-slate-500 font-mono">2 × 800 MW Super-critical Boilers</div>
+              <div className="text-[18px] font-mono font-bold text-slate-950 pt-2 border-t border-slate-200">1,685,000 t/yr</div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-200 space-y-2">
+              <span className="text-[10.5px] font-mono uppercase font-bold text-sky-700">Baseline Cement Off-Take</span>
+              <div className="text-[16px] font-bold text-slate-900">PPC Cement Blending</div>
+              <div className="text-[12px] text-sky-800 font-mono">37.64% Baseline Absorption</div>
+              <div className="text-[18px] font-mono font-bold text-sky-900 pt-2 border-t border-sky-200">634,300 t/yr</div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+              <span className="text-[10.5px] font-mono uppercase font-bold text-amber-800">Unutilized Surplus Sinks</span>
+              <div className="text-[16px] font-bold text-slate-900">Geopolymer & Civil Works</div>
+              <div className="text-[12px] text-amber-900 font-mono">62.35% Surplus to Divert</div>
+              <div className="text-[18px] font-mono font-bold text-amber-950 pt-2 border-t border-amber-200">1,050,700 t/yr</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="space-y-3" aria-labelledby="feasibility-title">
         <div className="flex flex-col gap-2 px-1 sm:flex-row sm:items-end sm:justify-between">
