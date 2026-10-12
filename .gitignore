@@ -35,3 +35,20 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*
+
+# AI agents & assistant context files
+AGENTS.md
+AGENTS*.md
+*HANDOFF*.md
+CLAUDE.md
+GEMINI.md
+.cursor*
+.cursorrules
+.claude*
+.windsurf*
+.gemini*
+.copilot*
+.antigravity*
+*.prompt.md
+/prompts/
+/scratch/
