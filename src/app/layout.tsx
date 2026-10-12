@@ -9,6 +9,12 @@ const geistSans = localFont({
   weight: "100 900",
 });
 
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
+
 export const metadata: Metadata = {
   title: "Symbion v2.0 - Industrial Symbiosis Decision Support System",
   description:
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.variable}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-slate-canvas text-slate-dark antialiased">
         <AppShell>{children}</AppShell>
       </body>
