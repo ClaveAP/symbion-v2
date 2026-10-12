@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useSymbion } from "@/context/symbion-context";
 import { useUserSession } from "@/context/user-session-context";
 import { TopologyCanvas } from "@/components/interactive/topology-canvas";
@@ -17,7 +17,6 @@ import {
 export default function TopologyPage() {
   const { currentCase, scenario, isJhiri, selectedAlpha } = useSymbion();
   const { isPartner, isAdmin } = useUserSession();
-  const [selectedFilter, setSelectedFilter] = useState<"all" | "inflow" | "outflow">("all");
 
   return (
     <div className="space-y-8">
@@ -81,56 +80,7 @@ export default function TopologyPage() {
         </div>
       )}
 
-      {/* Stream Filter Toggle Strip */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-white border border-slate-200 shadow-xs">
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-          <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase text-slate-400 px-1 sm:px-2">
-            STREAM FILTER:
-          </span>
-          <div className="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-[10.5px] sm:text-[11.5px] font-medium">
-            <button
-              type="button"
-              onClick={() => setSelectedFilter("all")}
-              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
-                selectedFilter === "all"
-                  ? "bg-white text-slate-900 font-bold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              All Streams ({currentCase.streamCount})
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedFilter("inflow")}
-              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
-                selectedFilter === "inflow"
-                  ? "bg-white text-slate-900 font-bold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Feedstock Inflows
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedFilter("outflow")}
-              className={`px-2.5 sm:px-3 py-1 rounded-md transition-all cursor-pointer ${
-                selectedFilter === "outflow"
-                  ? "bg-white text-slate-900 font-bold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Product Off-takes
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1.5 text-[10.5px] sm:text-[11px] font-mono text-slate-500">
-          <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-          <span>Click & drag any node to explore spatial layout</span>
-        </div>
-      </div>
-
-      {/* Full-Featured Topology Canvas */}
+      {/* Full-Featured Topology Canvas (Includes interactive filter & drag-and-drop) */}
       <div className="space-y-3">
         <TopologyCanvas currentCase={currentCase} scenario={scenario} />
       </div>
