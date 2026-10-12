@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useUserSession } from "@/context/user-session-context";
 import { MethodologyCard } from "@/components/interactive/methodology-card";
 import {
@@ -351,10 +351,13 @@ export default function MethodologyPage() {
 
               {/* Diagram Container */}
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex items-center justify-center overflow-hidden">
-                <img
+                <Image
                   src="/images/edigest_figure1.png"
                   alt="Figure 1: Symbion Decision-Support Framework Flowchart"
-                  className="w-full max-h-[620px] object-contain rounded-lg border border-slate-200/60 shadow-xs bg-white"
+                  width={1120}
+                  height={750}
+                  priority
+                  className="w-full h-auto max-h-[620px] object-contain rounded-lg border border-slate-200/60 shadow-xs bg-white"
                 />
               </div>
 
