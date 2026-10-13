@@ -72,10 +72,11 @@ function ShellInner({ children }: { children: React.ReactNode }) {
 
         {/* Right: Currency Toggle + Profile Avatar + Navigation Menu */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Mobile Currency Switcher */}
+          {/* Mobile Currency Switcher (compact format to avoid crowding) */}
           <CurrencyToggle
             currentCurrency={currency}
             onCurrencyChange={setCurrency}
+            compact
           />
 
           {/* Mobile Profile Menu */}
