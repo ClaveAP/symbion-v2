@@ -144,7 +144,7 @@ export function UserProfileMenu({ compact = false }: UserProfileMenuProps) {
           aria-orientation="vertical"
           tabIndex={-1}
           className={cn(
-            "absolute right-0 top-full mt-2 w-[340px] sm:w-[360px] rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xl ring-1 ring-slate-900/5 z-50 animate-in fade-in zoom-in-95 duration-150 focus:outline-none"
+            "absolute right-0 top-full mt-2 w-[calc(100vw-32px)] sm:w-[360px] max-w-[360px] rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xl ring-1 ring-slate-900/5 z-50 animate-in fade-in zoom-in-95 duration-150 focus:outline-none"
           )}
         >
           {isLoggedOut || !currentUser ? (
