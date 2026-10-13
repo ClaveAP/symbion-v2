@@ -12,6 +12,7 @@ import {
   ArrowLeftRight,
   ShieldCheck,
   Building2,
+  X,
 } from "lucide-react";
 import { APP_NAVIGATION } from "@/components/layout/navigation-config";
 import { CurrencyToggle } from "@/components/ui/currency-toggle";
@@ -74,9 +75,19 @@ export function Sidebar({ isOpen, onNavigate }: SidebarProps) {
             </div>
           </Link>
 
-          <span className="px-2 py-0.5 rounded-full text-[9.5px] font-mono font-bold bg-emerald-50 text-[#2c7a4b] border border-emerald-200">
-            I-SINERGIE
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="px-2 py-0.5 rounded-full text-[9.5px] font-mono font-bold bg-emerald-50 text-[#2c7a4b] border border-emerald-200">
+              I-SINERGIE
+            </span>
+            <button
+              type="button"
+              onClick={onNavigate}
+              className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+              aria-label="Close navigation sidebar"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Role Workspace Context Banner */}
