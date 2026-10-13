@@ -175,17 +175,17 @@ export default function ExecutiveOverviewPage() {
         {isPartner && (
           <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-900 to-[#14503f] text-white border border-emerald-800 shadow-md">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-3 border-b border-white/15 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-emerald-400/30">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-emerald-400/30 shrink-0">
                   MITRA KAWASAN OPERATING TELEMETRY
                 </span>
-                <span className="text-[12px] text-emerald-200">
+                <span className="text-[12px] text-emerald-200 truncate">
                   Node: <strong>PT Sawit Subang Bio-Industri</strong> (Subang Smartpolitan Axis)
                 </span>
               </div>
               <Link
                 href="/input-data"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white text-emerald-900 text-[11.5px] font-bold hover:bg-emerald-50 transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-emerald-900 text-[11.5px] font-bold hover:bg-emerald-50 transition-colors shadow-xs shrink-0"
               >
                 <span>Register New Feedstock Batch</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -491,7 +491,7 @@ export default function ExecutiveOverviewPage() {
                     aria-pressed={isActive}
                     onClick={() => setCurrentCaseId(option.id)}
                     className={cn(
-                      "min-h-9 rounded-md px-3 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600",
+                      "min-h-9 rounded-md px-2 sm:px-3 text-[11px] sm:text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 truncate",
                       isActive
                         ? "bg-white text-slate-950 shadow-xs"
                         : "text-slate-600 hover:bg-white/70 hover:text-slate-950"
